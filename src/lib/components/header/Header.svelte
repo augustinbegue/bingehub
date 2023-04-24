@@ -1,0 +1,65 @@
+<script lang="ts">
+	import { currentUser } from '$lib/modules/auth';
+	import { hasRole } from '$lib/modules/auth/utils';
+
+	let isAdmin = false;
+	$: $currentUser,
+		(() => {
+			isAdmin = hasRole('admin');
+		})();
+
+	async function logout() {
+		await fetch('/api/auth/logout', {
+			method: 'POST'
+		});
+
+		$currentUser = undefined;
+	}
+</script>
+
+<header class="navbar bg-base-300 shrink-0">
+	<div class="navbar-start">
+		<a class="btn btn-ghost font-bold text-lg normal-case" href="/">
+			<span class="mr-1">Binge</span>
+			<span class="px-1 py-1/2 bg-primary rounded-md text-black">hub</span>
+		</a>
+	</div>
+	<div class="hidden md:flex navbar-center">
+		<ul class="menu menu-horizontal px-1">
+			<li>
+				<a href="/search">search</a>
+			</li>
+			<li>
+				<a href="/requests">requests</a>
+			</li>
+		</ul>
+	</div>
+	<div class="navbar-end">
+		{#if $currentUser != null}
+			<div class="dropdown dropdown-end">
+				<button tabindex="0" class="btn lowercase">
+					<span class="text-base">@{$currentUser.username}</span>
+				</button>
+				<ul class="menu bg-base-200 dropdown-content p-2 shadow rounded-box w-52 mt-4">
+					<li><a href="/settings">settings</a></li>
+					{#if isAdmin}
+						<li><a href="/admin">admin settings</a></li>
+					{/if}
+
+					<div class="divider my-0 py-0" />
+					<li>
+						<button
+							on:click={async () => {
+								await logout();
+							}}
+						>
+							logout
+						</button>
+					</li>
+				</ul>
+			</div>
+		{:else}
+			<a class="btn btn-ghost lowercase text-base font-bold" href="/auth/login">login</a>
+		{/if}
+	</div>
+</header>
