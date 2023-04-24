@@ -19,7 +19,7 @@
 		on:click={close}
 	>
 		<div
-			class="modal-box flex items-center justify-center cursor-auto w-fit"
+			class="modal-box flex items-center justify-center cursor-auto"
 			on:click={(e) => {
 				e.stopPropagation();
 			}}
