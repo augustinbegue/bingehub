@@ -26,7 +26,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 					username: true
 				}
 			},
-			media: true
+			media: {
+				select: {
+					uid: true,
+					type: true,
+					url: true
+				}
+			}
 		}
 	});
 

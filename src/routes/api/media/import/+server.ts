@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	}
 
 	if (mediaType === MediaType.VIDEO_HARDLINKED) {
-		const basePath = paths[0];
+		const basePath = paths[0]?.replace(/\\/g, '/');
 
 		if (!basePath) {
 			throw error(400, 'Missing required fields');
@@ -35,6 +35,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 					title: `${title} - ${path.match(/S\d{2}E\d{2}/)?.[0]}`
 				};
 			});
+
+			// TODO: Transcode video to:
+			// AV1: 1080p
+			// VP9: 1080p, 720p
 
 			return json({
 				success: true,

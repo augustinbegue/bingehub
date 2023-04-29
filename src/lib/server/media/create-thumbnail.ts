@@ -8,20 +8,24 @@ ffmpeg.setFfmpegPath(path);
  * @param path path of the video
  */
 export async function createThumbnail(path: string) {
-	const filename = path.split('\\').pop() || path.split('/').pop();
+	path = path.replace(/\\/g, '/');
+
+	const filename = path.split('/').pop();
 	if (!filename) throw new Error('No filename found');
+
+	console.log(path, filename);
 
 	return new Promise<string>((resolve, reject) => {
 		ffmpeg(path)
 			.outputOptions('-vf', 'thumbnail', '-frames:v', '1')
-			.output(`static/thumbnails/${filename}.jpg`)
+			.output(`./${filename}.jpg`)
 			.on('error', (err) => {
 				console.log('An error occurred: ' + err.message);
 				reject(err);
 			})
 			.on('end', async () => {
-				const file = await readFile(`static/thumbnails/${filename}.jpg`);
-				// await rm(`static/thumbnails/${filename}.jpg`);
+				const file = await readFile(`./${filename}.jpg`);
+				await rm(`./${filename}.jpg`);
 
 				resolve(`data:image/png;base64,${file.toString('base64')}`);
 			})
