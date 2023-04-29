@@ -1,0 +1,1 @@
+import{N as a}from"./index.1fbcc1c5.js";import{c as e}from"./index.d363154b.js";function c(o,n=a(e)){var t;return console.log("hasRole",o,n),!!((t=n==null?void 0:n.roles)!=null&&t.find(r=>r.name===o))}function f(o=a(e)){return!!o}export{c as h,f as i};

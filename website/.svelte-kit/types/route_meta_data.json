@@ -1,0 +1,71 @@
+{
+	"/": [
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/admin": [
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts",
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/admin/media": [
+		"src/routes/admin/media/+page.server.ts",
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/admin/requests": [
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/admin/roles": [
+		"src/routes/admin/roles/+page.server.ts",
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/admin/users": [
+		"src/routes/admin/users/+page.server.ts",
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/api/auth/login": [
+		"src/routes/api/auth/login/+server.ts"
+	],
+	"/api/auth/logout": [
+		"src/routes/api/auth/logout/+server.ts"
+	],
+	"/api/media": [
+		"src/routes/api/media/+server.ts"
+	],
+	"/api/media/create": [
+		"src/routes/api/media/create/+server.ts"
+	],
+	"/api/media/import": [
+		"src/routes/api/media/import/+server.ts"
+	],
+	"/api/media/[uid]/delete": [
+		"src/routes/api/media/[uid]/delete/+server.ts"
+	],
+	"/api/media/[uid]/edit": [
+		"src/routes/api/media/[uid]/edit/+server.ts"
+	],
+	"/api/media/[uid]/stream": [
+		"src/routes/api/media/[uid]/stream/+server.ts"
+	],
+	"/api/roles/create": [
+		"src/routes/api/roles/create/+server.ts"
+	],
+	"/api/users/create": [
+		"src/routes/api/users/create/+server.ts"
+	],
+	"/api/users/edit": [
+		"src/routes/api/users/edit/+server.ts"
+	],
+	"/auth/login": [
+		"src/routes/+layout.server.ts"
+	],
+	"/watch/[uid]": [
+		"src/routes/watch/[uid]/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	]
+}

@@ -30,6 +30,7 @@ model User {
   posts     Post[]    @relation(name: "PostAuthor")
   sessions  Session[] @relation(name: "SessionUser")
   roles     Role[]    @relation(name: "UserRole")
+  jobs      Job[]     @relation(name: "JobUser")
 }
 
 model Session {
@@ -102,4 +103,36 @@ model Media {
   thumbnailDataUrl String?
   post             Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
   postId           String    @unique
+  jobs             Job[]     @relation(name: "JobMedia")
+}
+
+enum JobType {
+  TRANSCODE
+  THUMBNAIL
+  UPLOAD
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+model Job {
+  uid       String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  isActive  Boolean   @default(true)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  type      JobType
+  status    JobStatus @default(QUEUED)
+  data      String
+  error     String?
+  progress  Int
+  userId    String
+  user      User      @relation(name: "JobUser", fields: [userId], references: [uid])
+  media     Media?    @relation(name: "JobMedia", fields: [mediaUid], references: [uid])
+  mediaUid  String?
 }

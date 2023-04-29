@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"paths": {
+			"$lib": ["../lib"],
+			"$lib/*": ["../lib/*"]
+		}
+	},
+	"include": ["../lib/**/*.ts", "./src/**/*.ts"]
+}
