@@ -1,9 +1,15 @@
+import { isLogged } from '$lib/modules/auth/utils';
+import { error, json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/database/prisma';
 import type { IPagination } from '$lib/types';
-import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent, locals, url }) => {
-	const { user } = await parent();
+export const GET: RequestHandler = async ({ locals, url }) => {
+	if (!isLogged(locals.user)) {
+		throw error(401, 'Unauthorized');
+	}
+
+	const pageLength = parseInt(url.searchParams.get('count') ?? '9');
 	const pagination: IPagination = {
 		current: parseInt(url.searchParams.get('page') ?? '1'),
 		total: 0
@@ -18,8 +24,8 @@ export const load: PageServerLoad = async ({ parent, locals, url }) => {
 		include: {
 			media: true
 		},
-		take: 10,
-		skip: (pagination.current - 1) * 10,
+		take: pageLength,
+		skip: (pagination.current - 1) * pageLength,
 		orderBy: {
 			createdAt: 'desc'
 		}
@@ -32,10 +38,10 @@ export const load: PageServerLoad = async ({ parent, locals, url }) => {
 		}
 	});
 
-	pagination.total = Math.ceil(count / 10);
+	pagination.total = Math.ceil(count / pageLength);
 
-	return {
+	return json({
 		medias,
 		pagination
-	};
+	});
 };

@@ -14,12 +14,12 @@
 {#if isOpen}
 	<div
 		bind:this={container}
-		class="modal modal-open cursor-pointer"
+		class="modal modal-open cursor-pointer grow"
 		transition:fade={{ duration: 50 }}
 		on:click={close}
 	>
 		<div
-			class="modal-box flex items-center justify-center cursor-auto"
+			class="modal-box flex flex-col max-w-6xl"
 			on:click={(e) => {
 				e.stopPropagation();
 			}}

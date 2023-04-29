@@ -41,11 +41,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 		}
 	});
 
-	pagination.total = await prisma.user.count({
-		where: {
-			isDeleted: false
-		}
-	});
+	pagination.total = Math.ceil(
+		(await prisma.user.count({
+			where: {
+				isDeleted: false
+			}
+		})) / 20
+	);
 
 	return {
 		users,

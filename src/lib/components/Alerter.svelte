@@ -2,7 +2,7 @@
 	import { alerts } from '$lib/modules/interaction/alerter';
 </script>
 
-<div class="absolute bottom-0 p-4 w-full z-[1000]">
+<div class="fixed bottom-0 p-4 w-full z-[1000]">
 	<div class=" container mx-auto">
 		{#each $alerts as alert, i}
 			<div

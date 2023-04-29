@@ -12,6 +12,10 @@
 	let source = [`/api/media/${data.media.uid}/stream`];
 </script>
 
-<div class="container mx-auto">
+<div class="container mx-auto p-8">
 	<VideoPlayer {source} color={'#f28c18'} />
+	<div class="mt-4">
+		<h1 class="text-3xl font-bold">{data.media.title}</h1>
+		<p class="text-gray-500 mt-2">{data.media.content}</p>
+	</div>
 </div>

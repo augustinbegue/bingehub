@@ -30,11 +30,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 		}
 	});
 
-	pagination.total = await prisma.post.count({
-		where: {
-			isDeleted: false
-		}
-	});
+	pagination.total = Math.ceil(
+		(await prisma.post.count({
+			where: {
+				isDeleted: false
+			}
+		})) / 20
+	);
 
 	return {
 		posts,

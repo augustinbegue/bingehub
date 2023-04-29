@@ -91,14 +91,15 @@ enum MediaType {
 }
 
 model Media {
-  uid       String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  isActive  Boolean   @default(true)
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime?
-  type      MediaType
-  url       String
-  post      Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
-  postId    String    @unique
+  uid              String    @id @default(uuid())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  isActive         Boolean   @default(true)
+  isDeleted        Boolean   @default(false)
+  deletedAt        DateTime?
+  type             MediaType
+  url              String
+  thumbnailDataUrl String?
+  post             Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
+  postId           String    @unique
 }

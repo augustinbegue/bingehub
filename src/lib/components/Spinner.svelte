@@ -8,14 +8,12 @@
 		animation: rotate 2s linear infinite;
 		z-index: 2;
 		position: absolute;
-		top: 50%;
-		left: 50%;
 		margin: -25px 0 0 -25px;
 		width: 50px;
 		height: 50px;
 	}
 	.spinner .path {
-		@apply stroke-primary-content;
+		@apply stroke-primary;
 		stroke-linecap: round;
 		-webkit-animation: dash 1.5s ease-in-out infinite;
 		animation: dash 1.5s ease-in-out infinite;

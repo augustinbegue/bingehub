@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/env';
-
+	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 
 	export let horizontal = false;

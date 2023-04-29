@@ -1,7 +1,6 @@
 import { hasRole, isLogged } from '$lib/modules/auth/utils';
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
-import { goto } from '$app/navigation';
 
 export const load: LayoutLoad = async ({ parent, url }) => {
 	const parentData = await parent();
@@ -12,5 +11,9 @@ export const load: LayoutLoad = async ({ parent, url }) => {
 
 	if (!hasRole('admin', parentData.user)) {
 		throw error(403, 'You are not allowed to access this page');
+	}
+
+	if (url.pathname === '/admin') {
+		throw redirect(301, '/admin/users');
 	}
 };
