@@ -131,8 +131,8 @@ model Job {
   data      String
   error     String?
   progress  Int
-  userId    String
-  user      User      @relation(name: "JobUser", fields: [userId], references: [uid])
+  userUid   String
+  user      User      @relation(name: "JobUser", fields: [userUid], references: [uid])
   media     Media?    @relation(name: "JobMedia", fields: [mediaUid], references: [uid])
   mediaUid  String?
 }

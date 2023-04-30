@@ -6,14 +6,15 @@
 	import { alerts } from '$lib/modules/interaction/alerter';
 	import { Steps } from '$lib/modules/interaction/steps';
 	import type { PageData } from './$types';
-	import { MediaType, PostSubType, type Post } from '@prisma/client';
+	import { MediaType, PostSubType, type Post, JobType } from '@prisma/client';
 
 	export let data: PageData;
 
 	$: checkedData = data.posts.filter((p) => p.checked);
+	$: allChecked = checkedData.length === data.posts.length;
 
 	async function deleteCheckedData() {
-		let promises = checkedData.map((p) => fetch(`/api/media/${p.uid}/delete`, { method: 'POST' }));
+		let promises = checkedData.map((p) => fetch(`/api/medias/${p.uid}/delete`, { method: 'POST' }));
 
 		let res = await Promise.all(promises);
 
@@ -38,7 +39,7 @@
 		mediaUrl: ''
 	};
 	async function createMedia() {
-		let res = await fetch('/api/media/create', {
+		let res = await fetch('/api/medias/create', {
 			method: 'POST',
 			body: JSON.stringify(newMedia)
 		});
@@ -53,7 +54,7 @@
 	}
 
 	async function deleteMedia(media: Post) {
-		let res = await fetch(`/api/media/${media.uid}/delete`, {
+		let res = await fetch(`/api/medias/${media.uid}/delete`, {
 			method: 'POST'
 		});
 
@@ -79,7 +80,7 @@
 		mediaUrl: ''
 	};
 	async function editMedia() {
-		let res = await fetch(`/api/media/${editedMedia.uid}/edit`, {
+		let res = await fetch(`/api/medias/${editedMedia.uid}/edit`, {
 			method: 'POST',
 			body: JSON.stringify(editedMedia)
 		});
@@ -116,7 +117,7 @@
 		}
 	}
 	async function importFolder() {
-		let res = await fetch('/api/media/import', {
+		let res = await fetch('/api/medias/import', {
 			method: 'POST',
 			body: JSON.stringify(importedFolder)
 		});
@@ -135,7 +136,7 @@
 			const file = importedFolderFiles[i];
 
 			promises.push(
-				fetch('/api/media/create', {
+				fetch('/api/medias/create', {
 					method: 'POST',
 					body: JSON.stringify({
 						title: file.title,
@@ -162,6 +163,43 @@
 			]);
 		}
 	}
+
+	let createJobModal: Modal;
+	let newJob = {
+		type: '',
+		data: '{}',
+		mediaUid: ''
+	};
+	async function createJobs() {
+		let promises: Promise<Response>[] = [];
+
+		for (let i = 0; i < checkedData.length; i++) {
+			const entry = checkedData[i];
+
+			if (entry.media) {
+				promises.push(
+					fetch('/api/jobs/create', {
+						method: 'POST',
+						body: JSON.stringify({
+							type: newJob.type,
+							data: newJob.data,
+							mediaUid: entry.media?.uid
+						})
+					})
+				);
+			}
+		}
+
+		let res = await Promise.all(promises);
+
+		if (res.every((r) => r.ok)) {
+			alerts.update((alerts) => [...alerts, { type: 'success', message: 'Jobs created' }]);
+			createJobModal.close();
+			invalidateAll();
+		} else {
+			alerts.update((alerts) => [...alerts, { type: 'error', message: 'Failed to create jobs' }]);
+		}
+	}
 </script>
 
 <div class="flex flex-col">
@@ -173,6 +211,7 @@
 		<div class="btn-group">
 			<button class="btn btn-primary" on:click={createMediaModal.open}> Create </button>
 			<button class="btn btn-primary" on:click={importFolderModal.open}> Import Folder </button>
+			<button class="btn btn-secondary" on:click={createJobModal.open}> Create Job </button>
 			<button class="btn btn-error" on:click={deleteCheckedData}>Delete</button>
 		</div>
 	</div>
@@ -181,7 +220,19 @@
 		<table class="table table-zebra w-full">
 			<thead>
 				<tr>
-					<th />
+					<th>
+						<input
+							class="checkbox checkbox-xs mt-2"
+							type="checkbox"
+							on:click={() => {
+								data.posts = data.posts.map((post) => {
+									post.checked = !allChecked;
+									return post;
+								});
+							}}
+							bind:checked={allChecked}
+						/>
+					</th>
 					<th>Title</th>
 					<th>Url</th>
 					<th>Created @</th>
@@ -410,5 +461,35 @@
 				</div>
 			</div>
 		</section>
+	</div>
+</Modal>
+
+<Modal bind:this={createJobModal}>
+	<h1 class="text-2xl">Create new Job</h1>
+	<div class="form-control mt-6">
+		<label class="label" for="jobType">
+			<span class="label-text">Job Type</span>
+		</label>
+		<select name="jobType" class="select select-bordered" bind:value={newJob.type}>
+			{#each Object.keys(JobType) as type}
+				{#if type != 'UPLOAD'}
+					<option value={type}>{type}</option>
+				{/if}
+			{/each}
+		</select>
+	</div>
+	<div class="form-control mt-6">
+		<label class="label" for="jobData">
+			<span class="label-text">Job Data</span>
+		</label>
+		<textarea
+			name="jobData"
+			class="textarea textarea-bordered"
+			bind:value={newJob.data}
+			placeholder="JSON data"
+		/>
+	</div>
+	<div class="form-control mt-6">
+		<button class="btn btn-secondary" on:click={createJobs}>Create</button>
 	</div>
 </Modal>

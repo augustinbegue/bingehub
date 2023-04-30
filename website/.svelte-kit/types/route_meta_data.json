@@ -9,6 +9,11 @@
 		"src/routes/admin/+layout.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/admin/jobs": [
+		"src/routes/admin/jobs/+page.server.ts",
+		"src/routes/admin/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
 	"/admin/media": [
 		"src/routes/admin/media/+page.server.ts",
 		"src/routes/admin/+layout.ts",
@@ -34,23 +39,29 @@
 	"/api/auth/logout": [
 		"src/routes/api/auth/logout/+server.ts"
 	],
-	"/api/media": [
-		"src/routes/api/media/+server.ts"
+	"/api/jobs/create": [
+		"src/routes/api/jobs/create/+server.ts"
 	],
-	"/api/media/create": [
-		"src/routes/api/media/create/+server.ts"
+	"/api/medias": [
+		"src/routes/api/medias/+server.ts"
 	],
-	"/api/media/import": [
-		"src/routes/api/media/import/+server.ts"
+	"/api/medias/create": [
+		"src/routes/api/medias/create/+server.ts"
 	],
-	"/api/media/[uid]/delete": [
-		"src/routes/api/media/[uid]/delete/+server.ts"
+	"/api/medias/import": [
+		"src/routes/api/medias/import/+server.ts"
 	],
-	"/api/media/[uid]/edit": [
-		"src/routes/api/media/[uid]/edit/+server.ts"
+	"/api/medias/[uid]/delete": [
+		"src/routes/api/medias/[uid]/delete/+server.ts"
 	],
-	"/api/media/[uid]/stream": [
-		"src/routes/api/media/[uid]/stream/+server.ts"
+	"/api/medias/[uid]/edit": [
+		"src/routes/api/medias/[uid]/edit/+server.ts"
+	],
+	"/api/medias/[uid]/stream": [
+		"src/routes/api/medias/[uid]/stream/+server.ts"
+	],
+	"/api/medias/[uid]/[file]": [
+		"src/routes/api/medias/[uid]/[file]/+server.ts"
 	],
 	"/api/roles/create": [
 		"src/routes/api/roles/create/+server.ts"

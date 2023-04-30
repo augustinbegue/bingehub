@@ -18,7 +18,7 @@
 	let loading = false;
 	async function fetchMedia(count: number = 9) {
 		loading = true;
-		const res = await fetch(`/api/media?page=${page}&count=${count}`);
+		const res = await fetch(`/api/medias?page=${page}&count=${count}`);
 		const json = await res.json();
 		loading = false;
 		return json as {
