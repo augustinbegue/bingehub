@@ -5,7 +5,7 @@ import parseRange from 'range-parser';
 import { prisma } from '$lib/server/database/prisma';
 
 export const GET: RequestHandler = async ({ request, params }) => {
-	const rangeHeader = request.headers.get('range');
+	const rangeHeader = request.headers.get('content-range') || request.headers.get('range') || null;
 	const file = params.file;
 
 	const { uid } = params;
@@ -55,7 +55,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
 		const range = ranges[0];
 
-		const CHUNK_SIZE = 100 ** 6; // 1MB
+		const CHUNK_SIZE = 10 ** 6; // 1MB
 		const byteStart = Number(range.start);
 		const byteEnd = Math.min(byteStart + CHUNK_SIZE, videoSize - 1);
 		// const end = range.end;

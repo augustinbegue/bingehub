@@ -26,9 +26,14 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		},
 		take: pageLength,
 		skip: (pagination.current - 1) * pageLength,
-		orderBy: {
-			createdAt: 'desc'
-		}
+		orderBy: [
+			{
+				title: 'desc'
+			},
+			{
+				createdAt: 'desc'
+			}
+		]
 	});
 	const count = await prisma.post.count({
 		where: {
