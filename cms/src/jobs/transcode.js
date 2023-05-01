@@ -39,10 +39,18 @@ const { exec } = require('node:child_process');
     if (audioStreams.length === 0) throw new Error('No audio stream found');
     const subtitlesStreams = probe.streams.filter((stream) => stream.codec_type === 'subtitle');
 
+    const hdr = videoStream.pix_fmt === 'yuv420p10le';
+
     const profiles = [];
-    if (videoStream.height >= 480) profiles.push(FFMPEG_480P_PROFILE);
-    if (videoStream.height >= 720) profiles.push(FFMPEG_720P_PROFILE);
-    if (videoStream.height >= 1080) profiles.push(FFMPEG_1080P_PROFILE);
+    if (!hdr) {
+        if (videoStream.height >= 480) profiles.push(FFMPEG_480P_PROFILE);
+        if (videoStream.height >= 720) profiles.push(FFMPEG_720P_PROFILE);
+        if (videoStream.height >= 1080) profiles.push(FFMPEG_1080P_PROFILE);
+    } else {
+        if (videoStream.height >= 480) profiles.push(FFMPEG_480P_HDR_PROFILE);
+        if (videoStream.height >= 720) profiles.push(FFMPEG_720P_HDR_PROFILE);
+        if (videoStream.height >= 1080) profiles.push(FFMPEG_1080P_HDR_PROFILE);
+    }
 
     audioStreams.forEach((stream, i) => {
         profiles.push({
@@ -95,8 +103,6 @@ async function addOutputs(ffmpeg, outDir, filename, profiles) {
     if (profiles.length === 0) return ffmpeg;
     const [profile, ...rest] = profiles;
     const outFilePath = getFilePath(filename, outDir, profile.resolution);
-
-    console.log('Transcoding', filename, 'to', profile.resolution, 'in', outFilePath);
 
     ffmpeg
         .output(outFilePath)
@@ -188,6 +194,24 @@ const FFMPEG_480P_PROFILE = {
     ]
 };
 
+const FFMPEG_480P_HDR_PROFILE = {
+    resolution: '480p',
+    options: [
+        '-vf scale=640x480,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p',
+        '-b:v 750k',
+        '-minrate 375k',
+        '-maxrate 1088k',
+        '-tile-columns 1',
+        '-threads 4',
+        '-g 240',
+        '-quality good',
+        '-crf 33',
+        '-c:v libvpx-vp9',
+        '-speed 4',
+        '-an'
+    ]
+};
+
 const FFMPEG_720P_PROFILE = {
     resolution: '720p',
     options: [
@@ -206,10 +230,46 @@ const FFMPEG_720P_PROFILE = {
     ]
 };
 
+const FFMPEG_720P_HDR_PROFILE = {
+    resolution: '720p',
+    options: [
+        '-vf scale=1280x720,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p',
+        '-b:v 1024k',
+        '-minrate 512k',
+        '-maxrate 1485k',
+        '-tile-columns 2',
+        '-threads 8',
+        '-g 240',
+        '-quality good',
+        '-crf 32',
+        '-c:v libvpx-vp9',
+        '-speed 4',
+        '-an'
+    ]
+};
+
 const FFMPEG_1080P_PROFILE = {
     resolution: '1080p',
     options: [
         '-vf scale=1920x1080',
+        '-b:v 1800k',
+        '-minrate 900k',
+        '-maxrate 2610k',
+        '-tile-columns 2',
+        '-threads 8',
+        '-g 240',
+        '-quality good',
+        '-crf 31',
+        '-c:v libvpx-vp9',
+        '-speed 4',
+        '-an'
+    ]
+};
+
+const FFMPEG_1080P_HDR_PROFILE = {
+    resolution: '1080p',
+    options: [
+        '-vf scale=1920x1080,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p',
         '-b:v 1800k',
         '-minrate 900k',
         '-maxrate 2610k',

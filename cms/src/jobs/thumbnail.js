@@ -18,7 +18,7 @@ ffmpeg.setFfmpegPath(path);
 		job
 	}));
 
-	const mediaPath = job.data.media.url.replace(/\\/g, '/');
+	const mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
 	const filename = mediaPath.split('/').pop();
 	if (!filename) throw new Error('No filename found');
 
@@ -26,8 +26,19 @@ ffmpeg.setFfmpegPath(path);
 	const videoStream = probe.streams.find((stream) => stream.codec_type === 'video');
 	const nbFrames = videoStream.nb_frames ?? videoStream['NUMBER_OF_FRAMES'] ?? 0;
 
+	const options = [
+		'-frames:v 1'
+	];
+
+	// check for HDR
+	if (videoStream.pix_fmt === 'yuv420p10le') {
+		options.push('-vf thumbnail,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p');
+	} else {
+		options.push('-vf thumbnail');
+	}
+
 	ffmpeg(mediaPath)
-		.outputOptions('-vf', 'thumbnail', '-frames:v', '1')
+		.outputOptions(options)
 		.output(`./${filename}.jpg`)
 		.on('error', (err) => {
 			parentPort.postMessage({

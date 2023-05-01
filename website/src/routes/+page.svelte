@@ -48,7 +48,7 @@
 			src={highlightedMedia?.media?.thumbnailDataUrl}
 			alt={highlightedMedia?.title}
 		/>
-		<div class="hero-overlay bg-opacity-60" />
+		<div class="hero-overlay bg-opacity-90" />
 		<div class="hero-content text-neutral-content my-32">
 			<div>
 				<h1 class="mb-5 text-5xl font-bold">{highlightedMedia?.title}</h1>

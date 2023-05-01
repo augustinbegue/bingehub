@@ -23,7 +23,7 @@ export interface cmsJob {
 }
 
 const maxConcurrentJobs = 4;
-const runningJobs: cmsJob[] = [];
+let runningJobs: cmsJob[] = [];
 
 // Check for new jobs every 30 seconds
 setInterval(async () => {
@@ -34,13 +34,9 @@ checkForNewJobs();
 async function checkForNewJobs() {
 	const jobs = await prisma.job.findMany({
 		where: {
-			OR: [
-				{
-					status: {
-						notIn: ['COMPLETED']
-					}
-				}
-			],
+			status: {
+				notIn: ['COMPLETED', 'FAILED']
+			},
 			isDeleted: false,
 			isActive: true
 		},
@@ -65,7 +61,9 @@ async function checkForNewJobs() {
 						select: {
 							uid: true,
 							url: true,
-							type: true
+							type: true,
+							thumbnailDataUrl: true,
+							originalUrl: true
 						}
 					}
 				}
@@ -114,67 +112,115 @@ async function runJob(job: cmsJob) {
 	});
 	worker.on('message', async (message) => {
 		if (message.status === 'STARTED') {
-			log.info(`Job ${job.uid} started`);
+			onJobStart(job);
 		} else if (message.status === 'COMPLETED') {
-			log.info(`Job ${job.uid} completed`);
-
-			await prisma.job.update({
-				where: {
-					uid: job.uid
-				},
-				data: {
-					status: 'COMPLETED',
-					media: {
-						update: {
-							...message.job.data.media
-						}
-					}
-				}
-			});
-
-			const index = runningJobs.findIndex((j) => j.uid === job.uid);
-			if (index !== -1) {
-				runningJobs.splice(index, 1);
-			}
+			await onJobComplete(job, message);
 		} else if (message.status === 'PROGRESS') {
-			await prisma.job.update({
-				where: {
-					uid: job.uid
-				},
-				data: {
-					progress: message.progress
-				}
-			});
+			await onJobProgress(job, message);
 		} else if (message.status === 'FAILED') {
-			log.error(`Job ${job.uid} failed: `, message.error);
-
-			await prisma.job.update({
-				where: {
-					uid: job.uid
-				},
-				data: {
-					status: 'FAILED',
-					error: message.error.toString()
-				}
-			});
-
-			const index = runningJobs.findIndex((j) => j.uid === job.uid);
-			if (index !== -1) {
-				runningJobs.splice(index, 1);
-			}
+			await onJobFail(job, message.error);
 		}
 	});
 
 	worker.on('error', async (err) => {
-		log.error(`Job ${job.uid} failed`, err);
-		await prisma.job.update({
-			where: {
-				uid: job.uid
-			},
-			data: {
-				status: 'FAILED',
-				error: err.toString()
-			}
-		});
+		onJobFail(job, err);
 	});
+}
+async function onJobProgress(job: cmsJob, message: any) {
+	await prisma.job.update({
+		where: {
+			uid: job.uid
+		},
+		data: {
+			progress: message.progress
+		}
+	});
+}
+
+async function onJobFail(job: cmsJob, error: any) {
+	log.error(`Job ${job.uid} failed: `, error);
+
+	await prisma.job.update({
+		where: {
+			uid: job.uid
+		},
+		data: {
+			status: 'FAILED',
+			error: error.toString()
+		}
+	});
+
+	runningJobs = runningJobs.filter((j) => j.uid !== job.uid);
+}
+
+function onJobStart(job: cmsJob) {
+	log.info(`Job ${job.uid} started`);
+}
+
+async function onJobComplete(job: cmsJob, message: any) {
+	log.info(`Job ${job.uid} completed`);
+
+	await prisma.job.update({
+		where: {
+			uid: job.uid
+		},
+		data: {
+			status: 'COMPLETED',
+			media: {
+				update: {
+					...message.job.data.media
+				}
+			}
+		}
+	});
+
+	await prisma.media.updateMany({
+		where: {
+			AND: [
+				{
+					uid: job.data.media.uid
+				},
+				{
+					thumbnailDataUrl: {
+						not: null
+					}
+				},
+				{
+					url: {
+						endsWith: '.mpd'
+					}
+				}
+			]
+		},
+		data: {
+			isActive: true
+		}
+	});
+
+	await prisma.post.updateMany({
+		where: {
+			media: {
+				AND: [
+					{
+						uid: job.data.media.uid
+					},
+					{
+						thumbnailDataUrl: {
+							not: null
+						}
+					},
+					{
+						url: {
+							endsWith: '.mpd'
+						}
+					}
+				]
+			}
+		},
+		data: {
+			isActive: true
+		}
+	});
+
+	runningJobs = runningJobs.filter((j) => j.uid !== job.uid);
 }

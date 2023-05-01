@@ -8,7 +8,7 @@ const Alerter = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $alerts, $$unsubscribe_alerts;
   $$unsubscribe_alerts = subscribe(alerts, (value) => $alerts = value);
   $$unsubscribe_alerts();
-  return `<div class="absolute bottom-0 p-4 w-full z-[1000]"><div class="container mx-auto">${each($alerts, (alert, i) => {
+  return `<div class="fixed bottom-0 p-4 w-full z-[1000]"><div class="container mx-auto">${each($alerts, (alert, i) => {
     return `<div class="${[
       "alert shadow-lg m-2",
       (alert.type === "info" ? "alert-info" : "") + " " + (alert.type === "success" ? "alert-success" : "") + " " + (alert.type === "warning" ? "alert-warning" : "") + " " + (alert.type === "error" ? "alert-error" : "")
@@ -44,8 +44,8 @@ const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     })();
   }
   $$unsubscribe_currentUser();
-  return `<header class="navbar bg-base-300 shrink-0"><div class="navbar-start"><a class="btn btn-ghost lowercase font-bold text-lg" href="/"><span class="mr-1">binge</span>
-			<span class="px-2 py-1 bg-primary rounded-md">hub</span></a></div>
+  return `<header class="navbar bg-base-300 shrink-0"><div class="navbar-start"><a class="btn btn-ghost font-bold text-lg normal-case" href="/"><span class="mr-1">Binge</span>
+			<span class="px-1 py-1/2 bg-primary rounded-md text-black">hub</span></a></div>
 	<div class="hidden md:flex navbar-center"><ul class="menu menu-horizontal px-1"><li><a href="/search">search</a></li>
 			<li><a href="/requests">requests</a></li></ul></div>
 	<div class="navbar-end">${$currentUser != null ? `<div class="dropdown dropdown-end"><button tabindex="0" class="btn lowercase"><span class="text-base">@${escape($currentUser.username)}</span></button>

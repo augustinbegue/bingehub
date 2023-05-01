@@ -1,0 +1,28 @@
+FROM node:18-alpine
+
+# Create app directory
+WORKDIR /app
+
+# Copy package.json @ root and in workspaces
+COPY package*.json ./
+COPY cms/package*.json ./cms/
+COPY website/package*.json ./website/
+
+# Install dependencies
+RUN npm install --workspace=cms
+
+# Copy source code
+COPY . .
+
+# Generate prisma client
+RUN npx prisma generate
+
+# Install ffmpeg
+RUN apk add  --no-cache ffmpeg
+
+WORKDIR /app/cms
+
+# Build cms
+RUN npm run build
+
+CMD ["npm", "run", "start"]

@@ -3,7 +3,11 @@
 		"paths": {
 			"$lib": ["../lib"],
 			"$lib/*": ["../lib/*"]
-		}
+		},
+		"outDir": "./build",
+		"allowJs": true,
+		"rootDirs": ["./src", "../../lib"]
 	},
-	"include": ["../lib/**/*.ts", "./src/**/*.ts"]
+	"include": ["../../lib/**/*.ts", "./**/*.ts", "./**/*.js"],
+	"exclude": ["node_modules", "../../lib/server/firebase", "../../lib/modules", "build"]
 }

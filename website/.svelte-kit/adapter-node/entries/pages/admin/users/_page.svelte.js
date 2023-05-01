@@ -1,6 +1,7 @@
 import { c as create_ssr_component, a as subscribe, v as validate_component, e as each, f as add_attribute, d as escape } from "../../../../chunks/index3.js";
 import { p as page } from "../../../../chunks/stores.js";
-import { P as Pagination, M as Modal } from "../../../../chunks/pagination.js";
+import { M as Modal } from "../../../../chunks/Modal.js";
+import { P as Pagination } from "../../../../chunks/pagination.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $page, $$unsubscribe_page;
   $$unsubscribe_page = subscribe(page, (value) => $page = value);

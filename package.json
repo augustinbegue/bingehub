@@ -1,5 +1,6 @@
 {
     "name": "bingehub",
+    "version": "0.1.0",
     "scripts": {
         "generate": "npx prisma generate",
         "build": "npm run generate && concurrently npm:build:*",
@@ -11,8 +12,9 @@
         "dev": "npm run generate && concurrently npm:dev:*",
         "dev:cms": "npm run dev --workspace=cms",
         "dev:website": "npm run dev --workspace=website",
-        "lint": "npm run lint --workspace=cms && npm run lint --workspace=website",
-        "test": "playwright test"
+        "docker:build": "docker compose build",
+        "docker:publish": "docker compose push",
+        "docker:up": "docker compose up -d"
     },
     "workspaces": [
         "website",
@@ -20,8 +22,5 @@
     ],
     "devDependencies": {
         "concurrently": "^7.3.0"
-    },
-    "dependencies": {
-        "tslog": "^4.8.2"
     }
 }

@@ -1,13 +1,13 @@
 import { prisma } from '$lib/server/database/prisma';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ params, request }) => {
 	const { uid } = params;
-	const { title, content, type, subType, mediaType, mediaUrl } = await request.json();
+	const { title, content, type, subType, mediaType, mediaUrl, isActive } = await request.json();
 
 	if (!uid) {
-		return { status: 400, body: { message: 'Missing uid to update.' } };
+		throw error(400, 'Missing uid');
 	}
 
 	const res = await prisma.post.update({
@@ -17,6 +17,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 			content,
 			type,
 			subType,
+			isActive,
 			media: {
 				update: {
 					type: mediaType,

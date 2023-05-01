@@ -26,15 +26,22 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		try {
 			const res = await readdir(basePath);
 
-			console.log(res);
-
-			const medias: any[] = res.map((path) => {
-				return {
-					basePath,
-					path,
-					title: `${title} - ${path.match(/S\d{2}E\d{2}/)?.[0]}`
-				};
-			});
+			const medias: any[] = res
+				.filter(
+					(path) =>
+						path.endsWith('.mkv') ||
+						path.endsWith('.mp4') ||
+						path.endsWith('.avi') ||
+						path.endsWith('.webm') ||
+						path.endsWith('.mov')
+				)
+				.map((path) => {
+					return {
+						basePath,
+						path,
+						title: `${title} - ${path.match(/S\d{2}E\d{2}/)?.[0]}`
+					};
+				});
 
 			// TODO: Transcode video to:
 			// AV1: 1080p

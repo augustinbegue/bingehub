@@ -134,7 +134,7 @@ const options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html data-theme="halloween"\n	  lang="en">\n\n<head>\n	<meta charset="utf-8" />\n	<link rel="icon"\n		  href="' + assets2 + '/favicon.png" />\n\n\n	<link href="https://vjs.zencdn.net/8.0.4/video-js.css"\n		  rel="stylesheet" />\n	<meta name="viewport"\n		  content="width=device-width" />\n	' + head + '\n</head>\n\n<body data-sveltekit-preload-data="hover">\n	<div style="display: contents">' + body + '</div>\n	<script src="https://kit.fontawesome.com/9e9a6b3b19.js"\n			crossorigin="anonymous"><\/script>\n	<script src="https://vjs.zencdn.net/8.0.4/video.min.js"><\/script>\n</body>\n\n</html>\n',
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html data-theme="halloween"\n	  lang="en">\n\n<head>\n	<meta charset="utf-8" />\n	<link rel="icon"\n		  href="' + assets2 + '/favicon.png" />\n\n	<meta name="viewport"\n		  content="width=device-width" />\n	' + head + '\n</head>\n\n<body data-sveltekit-preload-data="hover">\n	<div style="display: contents">' + body + '</div>\n	<script src="https://kit.fontawesome.com/9e9a6b3b19.js"\n			crossorigin="anonymous"><\/script>\n</body>\n\n</html>\n',
     error: ({ status, message }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -195,7 +195,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "royllq"
+  version_hash: "1h8zzow"
 };
 function get_hooks() {
   return import("./hooks.server.js");

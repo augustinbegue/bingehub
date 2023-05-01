@@ -21,14 +21,23 @@ const load = async ({ locals, params, url }) => {
           username: true
         }
       },
-      media: true
+      media: {
+        select: {
+          uid: true,
+          type: true,
+          url: true,
+          thumbnailDataUrl: true
+        }
+      }
     }
   });
-  pagination.total = await prisma.post.count({
-    where: {
-      isDeleted: false
-    }
-  });
+  pagination.total = Math.ceil(
+    await prisma.post.count({
+      where: {
+        isDeleted: false
+      }
+    }) / 20
+  );
   return {
     posts,
     pagination

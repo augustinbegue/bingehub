@@ -1,19 +1,4 @@
-import { c as create_ssr_component, f as add_attribute, d as escape } from "./index3.js";
-const Modal = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let container;
-  let isOpen = false;
-  const open = () => {
-    isOpen = true;
-  };
-  const close = () => {
-    isOpen = false;
-  };
-  if ($$props.open === void 0 && $$bindings.open && open !== void 0)
-    $$bindings.open(open);
-  if ($$props.close === void 0 && $$bindings.close && close !== void 0)
-    $$bindings.close(close);
-  return `${isOpen ? `<div class="modal modal-open cursor-pointer"${add_attribute("this", container, 0)}><div class="modal-box flex items-center justify-center cursor-auto w-fit">${slots.default ? slots.default({}) : ``}</div></div>` : ``}`;
-});
+import { c as create_ssr_component, d as escape } from "./index3.js";
 const Pagination = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { pagination } = $$props;
   let { url } = $$props;
@@ -26,6 +11,5 @@ const Pagination = create_ssr_component(($$result, $$props, $$bindings, slots) =
 	<button class="btn btn-ghost" ${pagination.current === pagination.total ? "disabled" : ""}><i class="fa-solid fa-chevron-right"></i></button></div>`;
 });
 export {
-  Modal as M,
   Pagination as P
 };

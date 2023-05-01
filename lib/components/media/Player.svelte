@@ -57,8 +57,8 @@
 	});
 </script>
 
-<div bind:this={videoContainer}>
-	<video class="w-full h-full" bind:this={video} {poster}>
+<div class="w-full h-full" bind:this={videoContainer}>
+	<video bind:this={video} {poster}>
 		{#each source as src}
 			<source {src} />
 		{/each}

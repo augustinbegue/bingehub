@@ -8,6 +8,9 @@ const load = async ({ parent, url }) => {
   if (!hasRole("admin", parentData.user)) {
     throw error(403, "You are not allowed to access this page");
   }
+  if (url.pathname === "/admin") {
+    throw redirect(301, "/admin/users");
+  }
 };
 export {
   load

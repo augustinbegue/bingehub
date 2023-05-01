@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pagination from '$lib/components/pagination/pagination.svelte';
-	import { onDestroy } from 'svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

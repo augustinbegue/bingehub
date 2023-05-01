@@ -1,6 +1,7 @@
 import { i as isLogged } from "../../../../chunks/utils.js";
 import { r as redirect } from "../../../../chunks/index.js";
 import { p as prisma } from "../../../../chunks/prisma.js";
+const ssr = false;
 const load = async ({ parent, params, url }) => {
   const { uid } = params;
   const { user } = await parent();
@@ -23,5 +24,6 @@ const load = async ({ parent, params, url }) => {
   };
 };
 export {
-  load
+  load,
+  ssr
 };

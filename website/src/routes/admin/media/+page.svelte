@@ -6,7 +6,23 @@
 	import { alerts } from '$lib/modules/interaction/alerter';
 	import { Steps } from '$lib/modules/interaction/steps';
 	import type { PageData } from './$types';
-	import { MediaType, PostSubType, type Post, JobType } from '@prisma/client';
+	import type { Post } from '@prisma/client';
+
+	const MediaType = {
+		VIDEO_UPLOADED: 'VIDEO_UPLOADED',
+		VIDEO_LINKED: 'VIDEO_LINKED',
+		VIDEO_HARDLINKED: 'VIDEO_HARDLINKED'
+	};
+	const PostSubType = {
+		MOVIE: 'MOVIE',
+		SERIES: 'SERIES',
+		LIVE: 'LIVE'
+	};
+	const JobType = {
+		TRANSCODE: 'TRANSCODE',
+		THUMBNAIL: 'THUMBNAIL',
+		UPLOAD: 'UPLOAD'
+	};
 
 	export let data: PageData;
 
@@ -77,7 +93,8 @@
 		type: 'MEDIA',
 		subType: '',
 		mediaType: '',
-		mediaUrl: ''
+		mediaUrl: '',
+		isActive: true
 	};
 	async function editMedia() {
 		let res = await fetch(`/api/medias/${editedMedia.uid}/edit`, {
@@ -234,7 +251,8 @@
 						/>
 					</th>
 					<th>Title</th>
-					<th>Url</th>
+					<th>Transcoded</th>
+					<th>Thumbnail</th>
 					<th>Created @</th>
 					<th>Updated @</th>
 					<th>Active</th>
@@ -252,7 +270,20 @@
 							/>
 						</td>
 						<td>{post.title}</td>
-						<td>{post.media?.url}</td>
+						<td>
+							{#if post.media?.url.endsWith('.mpd')}
+								<span class="badge badge-success">Yes</span>
+							{:else}
+								<span class="badge badge-error">No</span>
+							{/if}
+						</td>
+						<td>
+							{#if post.media?.thumbnailDataUrl?.length}
+								<span class="badge badge-success">Yes</span>
+							{:else}
+								<span class="badge badge-error">No</span>
+							{/if}
+						</td>
 						<td>{post.createdAt.toLocaleString()}</td>
 						<td>{post.updatedAt.toLocaleString()}</td>
 						<td>
@@ -270,7 +301,8 @@
 											type: post.type,
 											subType: post.subType,
 											mediaType: post.media?.type ?? '',
-											mediaUrl: post.media?.url ?? ''
+											mediaUrl: post.media?.url ?? '',
+											isActive: post.isActive
 										};
 
 										editMediaModal.open();
@@ -298,42 +330,42 @@
 <Modal bind:this={createMediaModal}>
 	<h1 class="text-2xl">New media</h1>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="title" class="label">
 			<span class="label-text">Title</span>
 		</label>
-		<input class="input input-bordered" type="text" bind:value={newMedia.title} />
+		<input name="title" class="input input-bordered" type="text" bind:value={newMedia.title} />
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="content" class="label">
 			<span class="label-text">Content</span>
 		</label>
-		<textarea class="textarea textarea-bordered" bind:value={newMedia.content} />
+		<textarea name="content" class="textarea textarea-bordered" bind:value={newMedia.content} />
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="subtype" class="label">
 			<span class="label-text">Sub type</span>
 		</label>
-		<select class="select select-bordered" bind:value={newMedia.subType}>
+		<select name="subtype" class="select select-bordered" bind:value={newMedia.subType}>
 			{#each Object.keys(PostSubType) as type}
 				<option value={type}>{type}</option>
 			{/each}
 		</select>
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="mType" class="label">
 			<span class="label-text">Media type</span>
 		</label>
-		<select class="select select-bordered" bind:value={newMedia.mediaType}>
+		<select name="mType" class="select select-bordered" bind:value={newMedia.mediaType}>
 			{#each Object.keys(MediaType) as type}
 				<option value={type}>{type}</option>
 			{/each}
 		</select>
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="mUrl" class="label">
 			<span class="label-text">Media url</span>
 		</label>
-		<input class="input input-bordered" type="text" bind:value={newMedia.mediaUrl} />
+		<input name="mUrl" class="input input-bordered" type="text" bind:value={newMedia.mediaUrl} />
 	</div>
 	<div class="form-control mt-6">
 		<button class="btn btn-primary" on:click={createMedia}>Create</button>
@@ -343,42 +375,48 @@
 <Modal bind:this={editMediaModal}>
 	<h1 class="text-2xl">Edit media</h1>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="title" class="label">
 			<span class="label-text">Title</span>
 		</label>
-		<input class="input input-bordered" type="text" bind:value={editedMedia.title} />
+		<input name="title" class="input input-bordered" type="text" bind:value={editedMedia.title} />
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="content" class="label">
 			<span class="label-text">Content</span>
 		</label>
-		<textarea class="textarea textarea-bordered" bind:value={editedMedia.content} />
+		<textarea name="content" class="textarea textarea-bordered" bind:value={editedMedia.content} />
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="sType" class="label">
 			<span class="label-text">Sub type</span>
 		</label>
-		<select class="select select-bordered" bind:value={editedMedia.subType}>
+		<select name="sType" class="select select-bordered" bind:value={editedMedia.subType}>
 			{#each Object.keys(PostSubType) as type}
 				<option value={type}>{type}</option>
 			{/each}
 		</select>
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="mType" class="label">
 			<span class="label-text">Media type</span>
 		</label>
-		<select class="select select-bordered" bind:value={editedMedia.mediaType}>
+		<select name="mType" class="select select-bordered" bind:value={editedMedia.mediaType}>
 			{#each Object.keys(MediaType) as type}
 				<option value={type}>{type}</option>
 			{/each}
 		</select>
 	</div>
 	<div class="form-control mt-6">
-		<label class="label">
+		<label for="mUrl" class="label">
 			<span class="label-text">Media url</span>
 		</label>
-		<textarea class="textarea textarea-bordered" bind:value={editedMedia.mediaUrl} />
+		<textarea name="mUrl" class="textarea textarea-bordered" bind:value={editedMedia.mediaUrl} />
+	</div>
+	<div>
+		<label class="cursor-pointer label">
+			<span class="label-text">Active</span>
+			<input name="Active" type="checkbox" class="checkbox" bind:checked={editedMedia.isActive} />
+		</label>
 	</div>
 	<div class="form-control mt-6">
 		<button class="btn btn-primary" on:click={editMedia}>Edit</button>
@@ -395,16 +433,21 @@
 	<div bind:this={importFolderModalSectionsContainer}>
 		<section class="flex flex-col">
 			<div class="form-control mt-6">
-				<label class="label">
+				<label for="title" class="label">
 					<span class="label-text">Title</span>
 				</label>
-				<input class="input input-bordered" type="text" bind:value={importedFolder.title} />
+				<input
+					name="title"
+					class="input input-bordered"
+					type="text"
+					bind:value={importedFolder.title}
+				/>
 			</div>
 			<div class="form-control mt-6">
-				<label class="label">
+				<label for="mType" class="label">
 					<span class="label-text">Media Type</span>
 				</label>
-				<select class="select select-bordered" bind:value={importedFolder.mediaType}>
+				<select name="mType" class="select select-bordered" bind:value={importedFolder.mediaType}>
 					{#each Object.keys(MediaType) as type}
 						{#if type != 'VIDEO_LINKED'}
 							<option value={type}>{type}</option>
@@ -413,10 +456,14 @@
 				</select>
 				{#if importedFolder.mediaType === 'VIDEO_HARDLINKED'}
 					<div class="form-control mt-6">
-						<label class="label">
+						<label for="bFolder" class="label">
 							<span class="label-text">Base Folder Url</span>
 						</label>
-						<textarea class="textarea textarea-bordered" bind:value={importedFolder.paths[0]} />
+						<textarea
+							name="bFolder"
+							class="textarea textarea-bordered"
+							bind:value={importedFolder.paths[0]}
+						/>
 					</div>
 				{/if}
 			</div>

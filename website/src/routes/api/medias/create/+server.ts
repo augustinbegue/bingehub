@@ -21,10 +21,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			type,
 			subType,
 			authorId: locals.user!.uid,
+			isActive: false,
 			media: {
 				create: {
 					type: mediaType,
-					url: mediaUrl
+					url: mediaUrl,
+					originalUrl: mediaUrl
 				}
 			}
 		}

@@ -100,6 +100,7 @@ model Media {
   deletedAt        DateTime?
   type             MediaType
   url              String
+  originalUrl      String    @default("")
   thumbnailDataUrl String?
   post             Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
   postId           String    @unique
