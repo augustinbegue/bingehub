@@ -9,17 +9,17 @@
 <div class="p-6 md:hidden" />
 
 <div class="z-50 btm-nav flex btm-nav-sm md:hidden">
-	<a href="/new" class:active={url?.toString().indexOf('/new') != -1}>
-		<span class="material-icons-outlined"> add </span>
+	<a href="/search" class:active={url?.toString().indexOf('/search') != -1}>
+		<i class="fa-solid fa-magnifying-glass" />
 	</a>
 	<a
 		href="/"
 		class:active={url?.toString().indexOf('/search') === -1 &&
 			url?.toString().indexOf('/new') === -1}
 	>
-		<span class="material-icons-outlined"> home </span>
+		<i class="fa-solid fa-play" />
 	</a>
-	<a href="/search" class:active={url?.toString().indexOf('/search') != -1}>
-		<span class="material-icons-outlined"> search </span>
+	<a href="/requests" class:active={url?.toString().indexOf('/requests') != -1}>
+		<i class="fa-solid fa-code-pull-request" />
 	</a>
 </div>

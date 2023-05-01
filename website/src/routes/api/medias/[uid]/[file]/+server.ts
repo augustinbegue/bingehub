@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { error } from '@sveltejs/kit';
 import parseRange from 'range-parser';
 import { prisma } from '$lib/server/database/prisma';
+import { dev } from '$app/environment';
 
 export const GET: RequestHandler = async ({ request, params }) => {
 	const rangeHeader = request.headers.get('content-range') || request.headers.get('range') || null;
@@ -14,7 +15,12 @@ export const GET: RequestHandler = async ({ request, params }) => {
 			uid
 		},
 		include: {
-			media: true
+			media: {
+				select: {
+					url: true,
+					originalUrl: true
+				}
+			}
 		}
 	});
 
@@ -27,7 +33,19 @@ export const GET: RequestHandler = async ({ request, params }) => {
 		throw error(404, 'Media not found');
 	}
 
-	const videoPath = manifestPath.replace('manifest.mpd', file);
+	let videoPath = manifestPath.replace('manifest.mpd', file);
+
+	if (file === 'static') {
+		if (!media.media?.originalUrl) {
+			throw error(404, 'Media not found');
+		}
+
+		videoPath = media.media?.originalUrl;
+	}
+
+	if (dev) {
+		videoPath = videoPath.replace('/torrent', 'Z:\\torrent');
+	}
 
 	try {
 		const stats = await fs.promises.stat(videoPath);
@@ -55,10 +73,10 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
 		const range = ranges[0];
 
-		const CHUNK_SIZE = 10 ** 6; // 1MB
+		// const CHUNK_SIZE = 10 ** 6; // 10MB
 		const byteStart = Number(range.start);
-		const byteEnd = Math.min(byteStart + CHUNK_SIZE, videoSize - 1);
-		// const end = range.end;
+		// const byteEnd = Math.min(byteStart + CHUNK_SIZE, videoSize - 1);
+		const byteEnd = range.end;
 
 		const contentLength = byteEnd - byteStart + 1;
 

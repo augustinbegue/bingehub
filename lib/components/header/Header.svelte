@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { currentUser } from '$lib/modules/auth';
 	import { hasRole } from '$lib/modules/auth/utils';
+	import { browser } from '$app/environment';
 
 	let isAdmin = false;
 	$: $currentUser,
@@ -14,6 +15,10 @@
 		});
 
 		$currentUser = undefined;
+
+		if (browser) {
+			window.location.reload();
+		}
 	}
 </script>
 

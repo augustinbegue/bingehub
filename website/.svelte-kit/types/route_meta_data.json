@@ -1,5 +1,6 @@
 {
 	"/": [
+		"src/routes/+page.server.ts",
 		"src/routes/+layout.server.ts",
 		"src/routes/+layout.server.ts"
 	],
@@ -73,6 +74,12 @@
 		"src/routes/api/users/edit/+server.ts"
 	],
 	"/auth/login": [
+		"src/routes/+layout.server.ts"
+	],
+	"/requests": [
+		"src/routes/+layout.server.ts"
+	],
+	"/search": [
 		"src/routes/+layout.server.ts"
 	],
 	"/watch/[uid]": [

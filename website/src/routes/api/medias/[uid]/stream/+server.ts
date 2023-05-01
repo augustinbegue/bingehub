@@ -2,6 +2,7 @@ import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
 import { prisma } from '$lib/server/database/prisma';
 import { createReadStream } from 'node:fs';
+import { dev } from '$app/environment';
 
 export const GET: RequestHandler = async ({ request, params }) => {
 	const { uid } = params;
@@ -18,9 +19,13 @@ export const GET: RequestHandler = async ({ request, params }) => {
 		throw error(404, 'Media not found');
 	}
 
-	const manifestPath = media.media?.url;
+	let manifestPath = media.media?.url;
 	if (!manifestPath) {
 		throw error(404, 'Media not found');
+	}
+
+	if (dev) {
+		manifestPath = manifestPath.replace('/torrent', 'Z:\\torrent');
 	}
 
 	// Create a read stream from the DASH manifest file

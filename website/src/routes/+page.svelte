@@ -58,7 +58,7 @@
 	</div>
 {/if}
 
-<div class="container mx-auto grid grid-cols-3 gap-8 mt-8">
+<div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
 	{#each medias as media, i}
 		<div class="card shadow-xl image-full">
 			<figure><img src={media.media?.thumbnailDataUrl} alt={media.title} /></figure>

@@ -12,9 +12,15 @@
 	export let shakaUi: shaka.ui.Overlay;
 
 	export let onError: (error: shaka.util.Error) => void = (error) => {
-		console.log(source, poster.length);
+		const { severity, category, code } = error;
 
-		console.error(error);
+		console.error(
+			`Shaka Player Error: ${
+				Object.entries(shaka.util.Error.Severity).find(([, value]) => value === severity)[0]
+			} ${Object.entries(shaka.util.Error.Category).find(([, value]) => value === category)[0]} ${
+				Object.entries(shaka.util.Error.Code).find(([, value]) => value === code)[0]
+			}`
+		);
 	};
 
 	onMount(() => {
@@ -27,7 +33,7 @@
 				new shaka.util.Error(
 					shaka.util.Error.Severity.CRITICAL,
 					shaka.util.Error.Category.PLAYER,
-					shaka.util.Error.Code.INVALID_STREAMS_OBJECT
+					shaka.util.Error.Code.MEDIA_SOURCE_OPERATION_FAILED
 				)
 			);
 		}
@@ -58,6 +64,7 @@
 </script>
 
 <div class="w-full h-full" bind:this={videoContainer}>
+	<!-- svelte-ignore a11y-media-has-caption -->
 	<video bind:this={video} {poster}>
 		{#each source as src}
 			<source {src} />
