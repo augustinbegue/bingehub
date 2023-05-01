@@ -1,6 +1,6 @@
 {
     "name": "bingehub",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "scripts": {
         "generate": "npx prisma generate",
         "build": "npm run generate && concurrently npm:build:*",

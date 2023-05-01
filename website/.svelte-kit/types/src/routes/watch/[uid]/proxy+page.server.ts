@@ -11,7 +11,7 @@ export const load = async ({ parent, params, url }: Parameters<PageServerLoad>[0
 	const { user } = await parent();
 
 	if (!isLogged(user)) {
-		throw redirect(301, `/login?redirect=${url.pathname}`);
+		throw redirect(301, `/auth/login?redirect=${url.pathname}`);
 	}
 
 	const media = await prisma.post.findUnique({
