@@ -20,7 +20,10 @@ export const GET: RequestHandler = async ({ request, params }) => {
 	}
 
 	let manifestPath = media.media?.url;
-	if (!manifestPath) {
+
+	console.log(manifestPath);
+
+	if (!manifestPath || !manifestPath.endsWith('.mpd')) {
 		throw error(404, 'Media not found');
 	}
 

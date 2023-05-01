@@ -10,16 +10,12 @@
 </script>
 
 <div class="container mx-auto p-8">
-	{#if source.length > 0 && data.media.media}
+	{#if source.length > 0 && data.media.media && data.media.media.url.endsWith('.mpd')}
 		<Player {source} poster={data.media.media?.thumbnailDataUrl} />
 	{:else}
-		<div class="bg-gray-900 w-full h-full flex items-center justify-center">
-			<img
-				src={data.media.media?.thumbnailDataUrl}
-				class="w-full h-full object-contain"
-				alt={data.media.title}
-			/>
-		</div>
+		<video autoplay controls class="w-full" poster={data.media.media?.thumbnailDataUrl}>
+			<source src={`/api/medias/${data.media.uid}/static`} type="video/mp4" />
+		</video>
 	{/if}
 
 	<div class="mt-4">
@@ -28,7 +24,7 @@
 			<button
 				class="btn btn-sm btn-primary gap-2"
 				on:click={() => {
-					navigator.clipboard.writeText(`${$page.url.origin}${source[0]}`);
+					navigator.clipboard.writeText(`${$page.url.origin}/api/medias/${data.media.uid}/static`);
 				}}
 			>
 				<i class="fa-solid fa-copy" /> Copy stream link

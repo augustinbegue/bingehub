@@ -27,21 +27,15 @@ export const GET: RequestHandler = async ({ request, params }) => {
 	if (!media) {
 		throw error(404, 'Media not found');
 	}
+	const DASH = file !== 'static';
 
-	const manifestPath = media.media?.url;
-	if (!manifestPath) {
+	let videoPath = DASH ? media.media?.url?.replace('manifest.mpd', file) : media.media?.originalUrl;
+
+	if (!videoPath) {
 		throw error(404, 'Media not found');
 	}
 
-	let videoPath = manifestPath.replace('manifest.mpd', file);
-
-	if (file === 'static') {
-		if (!media.media?.originalUrl) {
-			throw error(404, 'Media not found');
-		}
-
-		videoPath = media.media?.originalUrl;
-	}
+	videoPath = videoPath.replace(/\\/g, '/');
 
 	if (dev) {
 		videoPath = videoPath.replace('/torrent', 'Z:\\torrent');
@@ -72,11 +66,13 @@ export const GET: RequestHandler = async ({ request, params }) => {
 		}
 
 		const range = ranges[0];
-
-		// const CHUNK_SIZE = 10 ** 6; // 10MB
 		const byteStart = Number(range.start);
-		// const byteEnd = Math.min(byteStart + CHUNK_SIZE, videoSize - 1);
-		const byteEnd = range.end;
+		let byteEnd = Number(range.end);
+
+		if (!DASH) {
+			const CHUNK_SIZE = 100 ** 6; // 100MB
+			byteEnd = Math.min(byteStart + CHUNK_SIZE, videoSize - 1);
+		}
 
 		const contentLength = byteEnd - byteStart + 1;
 

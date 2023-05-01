@@ -11,6 +11,8 @@
 	export let shakaPlayer: shaka.Player;
 	export let shakaUi: shaka.ui.Overlay;
 
+	let dashFailed = false;
+
 	export let onError: (error: shaka.util.Error) => void = (error) => {
 		const { severity, category, code } = error;
 
@@ -23,7 +25,23 @@
 		);
 	};
 
-	onMount(() => {
+	async function loadSource(index = 0) {
+		console.log(`Loading source ${index}`);
+
+		try {
+			await shakaPlayer.load(source[index]);
+		} catch (error) {
+			dashFailed = true;
+
+			if (index < source.length - 1) {
+				loadSource(index + 1);
+			} else {
+				onError(error);
+			}
+		}
+	}
+
+	onMount(async () => {
 		document.addEventListener('shaka-ui-loaded', () => {
 			console.log('UI loaded');
 		});
@@ -50,12 +68,7 @@
 				onError(event.detail);
 			});
 
-			shakaPlayer
-				.load(source[0])
-				.then(() => {
-					// This runs if the asynchronous load is successful.
-				})
-				.catch(onError);
+			await loadSource();
 		} else {
 			// This browser does not have the minimum set of APIs we need.
 			alert('Browser not supported!');
@@ -65,11 +78,7 @@
 
 <div class="w-full h-full" bind:this={videoContainer}>
 	<!-- svelte-ignore a11y-media-has-caption -->
-	<video bind:this={video} {poster}>
-		{#each source as src}
-			<source {src} />
-		{/each}
-	</video>
+	<video bind:this={video} {poster} />
 </div>
 
 <style>
