@@ -9,15 +9,16 @@
 	let source = [`/api/medias/${data.media.uid}/stream`];
 </script>
 
-<div class="container mx-auto p-8">
+<div class="flex max-h-[75vh] bg-black">
 	{#if source.length > 0 && data.media.media && data.media.media.url.endsWith('.mpd')}
 		<Player {source} poster={data.media.media?.thumbnailDataUrl} />
 	{:else}
-		<video autoplay controls class="w-full" poster={data.media.media?.thumbnailDataUrl}>
+		<video autoplay controls class="grow w-auto" poster={data.media.media?.thumbnailDataUrl}>
 			<source src={`/api/medias/${data.media.uid}/static`} type="video/mp4" />
 		</video>
 	{/if}
-
+</div>
+<div class="container mx-auto p-8">
 	<div class="mt-4">
 		<h1 class="text-3xl font-bold">{data.media.title}</h1>
 		<p class="text-gray-500 mt-2">

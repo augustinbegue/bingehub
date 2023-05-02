@@ -42,9 +42,9 @@
 </script>
 
 {#if highlightedMedia}
-	<div class="hero">
+	<div class="hero bg-black">
 		<img
-			class="hero-image"
+			class="hero-image max-h-[75vh]"
 			src={highlightedMedia?.media?.thumbnailDataUrl}
 			alt={highlightedMedia?.title}
 		/>

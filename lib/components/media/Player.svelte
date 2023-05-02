@@ -76,9 +76,9 @@
 	});
 </script>
 
-<div class="w-full h-full" bind:this={videoContainer}>
+<div bind:this={videoContainer}>
 	<!-- svelte-ignore a11y-media-has-caption -->
-	<video bind:this={video} {poster} />
+	<video class="grow w-auto" bind:this={video} {poster} />
 </div>
 
 <style>

@@ -1,1 +1,0 @@
-import{N as n}from"./index.c7fa5583.js";import{c as e}from"./index.5201c2eb.js";function m(o,r=n(e)){var t;return!!((t=r==null?void 0:r.roles)!=null&&t.find(a=>a.name===o))}function s(o=n(e)){return!!o}export{m as h,s as i};
