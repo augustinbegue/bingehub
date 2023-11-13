@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import { addAlert } from '$lib/modules/interaction/alerter';
 	import type { PageData } from './$types';
@@ -17,7 +18,7 @@
 
 		newRequestLoading = true;
 
-		const res = await fetch('/api/request/create', {
+		const res = await fetch('/api/requests/create', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -38,6 +39,8 @@
 				type: 'success',
 				message: 'Request created'
 			});
+
+			invalidateAll();
 
 			newRequestLoading = false;
 		} else {

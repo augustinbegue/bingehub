@@ -3,9 +3,9 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 
 	let fileInput: HTMLDivElement;
-	export let file: File;
+	export let file: File | undefined;
 	export let dataUrl: string;
-	export let onchange: (file: File) => void;
+	export let onchange: ((file: File) => void) | undefined;
 	let loading = false;
 	$: validFile = file?.type.startsWith('image/');
 
@@ -84,22 +84,12 @@
 <div
 	bind:this={fileInput}
 	class="card bg-base-100 shadow-2xl h-full w-full max-w-5xl m-8 cursor-pointer max-h-[70vh]"
-	class:image-full={validFile}
+	class:image-full={dataUrl}
 	class:cursor-pointer={!loading}
 >
 	{#if loading}
 		<div class="card-body bg-base-100 items-center opacity-100 py-40 transition-all">
 			<Spinner />
-		</div>
-	{:else if !validFile}
-		<div class="card-body items-center opacity-50 py-40 transition-all">
-			<span class="text-6xl">
-				<span class="material-icons-outlined"> file_upload </span>
-			</span>
-			<h1 class="text-xl">
-				<span class="font-bold">Choose a file</span>
-				or drag it here
-			</h1>
 		</div>
 	{:else if dataUrl}
 		<figure class="p-4">
@@ -107,7 +97,17 @@
 		</figure>
 		<div class="card-body items-center justify-center opacity-100 transition-all">
 			<span class="text-6xl">
-				<span class="material-icons-outlined"> file_upload </span>
+				<i class="fa-solid fa-upload" />
+			</span>
+			<h1 class="text-xl">
+				<span class="font-bold">Choose a file</span>
+				or drag it here
+			</h1>
+		</div>
+	{:else if !validFile}
+		<div class="card-body items-center opacity-50 py-40 transition-all">
+			<span class="text-6xl">
+				<i class="fa-solid fa-upload" />
 			</span>
 			<h1 class="text-xl">
 				<span class="font-bold">Choose a file</span>

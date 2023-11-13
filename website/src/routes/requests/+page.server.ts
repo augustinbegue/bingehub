@@ -1,7 +1,7 @@
 import { isLogged } from '$lib/modules/auth/utils';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { GetRequestResponse } from '../api/request/+server';
+import type { GetRequestResponse } from '../api/requests/+server';
 
 export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 	if (!isLogged(locals.user)) {
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals, fetch, url }) => {
 
 	const page = parseInt(url.searchParams.get('page') ?? '1');
 
-	const requests = (await fetch(`/api/request?page=${page}`).then(
+	const requests = (await fetch(`/api/requests?page=${page}`).then(
 		async (res) => await res.json()
 	)) as GetRequestResponse;
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import ImagePickerDragAndDrop from '$lib/components/inputs/ImagePickerDragAndDrop.svelte';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import Pagination from '$lib/components/pagination/pagination.svelte';
 	import { alerts } from '$lib/modules/interaction/alerter';
@@ -94,7 +95,8 @@
 		subType: '',
 		mediaType: '',
 		mediaUrl: '',
-		isActive: true
+		isActive: true,
+		thumbnailDataURL: ''
 	};
 	async function editMedia() {
 		let res = await fetch(`/api/medias/${editedMedia.uid}/edit`, {
@@ -302,7 +304,8 @@
 											subType: post.subType,
 											mediaType: post.media?.type ?? '',
 											mediaUrl: post.media?.url ?? '',
-											isActive: post.isActive
+											isActive: post.isActive,
+											thumbnailDataURL: post.media?.thumbnailDataUrl ?? ''
 										};
 
 										editMediaModal.open();
@@ -411,6 +414,12 @@
 			<span class="label-text">Media url</span>
 		</label>
 		<textarea name="mUrl" class="textarea textarea-bordered" bind:value={editedMedia.mediaUrl} />
+	</div>
+	<div class="form-control mt-6">
+		<label for="mThumb">
+			<span class="label-text">Thumbnail</span>
+		</label>
+		<ImagePickerDragAndDrop bind:dataUrl={editedMedia.thumbnailDataURL} />
 	</div>
 	<div>
 		<label class="cursor-pointer label">

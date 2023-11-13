@@ -32,9 +32,9 @@ ffmpeg.setFfmpegPath(path);
 
 	// check for HDR
 	if (videoStream.pix_fmt === 'yuv420p10le') {
-		options.push('-vf thumbnail,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p');
+		options.push(`-vf thumbnail,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p`);
 	} else {
-		options.push('-vf thumbnail');
+		options.push(`-vf thumbnail`);
 	}
 
 	ffmpeg(mediaPath)

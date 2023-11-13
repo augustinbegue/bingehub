@@ -37,7 +37,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
 	videoPath = videoPath.replace(/\\/g, '/');
 
-	if (dev) {
+	if (dev && !videoPath.startsWith('Z')) {
 		videoPath = videoPath.replace('/torrent', 'Z:\\torrent');
 	}
 
