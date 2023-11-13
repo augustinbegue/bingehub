@@ -12,6 +12,7 @@
 </script>
 
 {#if isOpen}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
 		bind:this={container}
 		class="modal modal-open cursor-pointer grow"
@@ -19,7 +20,7 @@
 		on:click={close}
 	>
 		<div
-			class="modal-box flex flex-col max-w-6xl"
+			class="modal-box flex flex-col max-w-6xl cursor-default"
 			on:click={(e) => {
 				e.stopPropagation();
 			}}

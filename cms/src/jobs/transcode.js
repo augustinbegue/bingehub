@@ -76,7 +76,14 @@ const { exec } = require('node:child_process');
 
     console.log('Transcoding', filename, 'to', profiles.map((profile) => profile.resolution).join(', '), 'in', outDir);
 
-    (await addOutputs(ffmpeg(mediaPath), outDir, filename, profiles))
+    let instance = ffmpeg()
+        .input(mediaPath)
+        .addInputOption('-hwaccel cuda');
+
+    instance = (await addOutputs(instance, outDir, filename, profiles))
+        .on('start', (commandLine) => {
+            console.log('Spawned Ffmpeg with command: ' + commandLine);
+        })
         .on('error', (err) => {
             parentPort.postMessage({
                 status: 'FAILED',

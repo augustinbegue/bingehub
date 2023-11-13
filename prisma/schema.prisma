@@ -31,6 +31,7 @@ model User {
   sessions  Session[] @relation(name: "SessionUser")
   roles     Role[]    @relation(name: "UserRole")
   jobs      Job[]     @relation(name: "JobUser")
+  requests  Request[] @relation(name: "RequestAuthor")
 }
 
 model Session {
@@ -83,6 +84,7 @@ model Post {
   media             Media?      @relation(name: "PostMedia")
   linkedPostsParent Post[]      @relation(name: "PostLinked")
   linkedPostsChild  Post[]      @relation(name: "PostLinked")
+  requests          Request[]   @relation(name: "RequestPost")
 }
 
 enum MediaType {
@@ -136,4 +138,33 @@ model Job {
   user      User      @relation(name: "JobUser", fields: [userUid], references: [uid])
   media     Media?    @relation(name: "JobMedia", fields: [mediaUid], references: [uid])
   mediaUid  String?
+}
+
+enum RequestType {
+  MOVIE
+  SERIES
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  FULLFILLED
+  REJECTED
+}
+
+model Request {
+  uid       String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  isActive  Boolean       @default(true)
+  isDeleted Boolean       @default(false)
+  deletedAt DateTime?
+  status    RequestStatus
+  type      RequestType
+  title     String
+  content   String
+  author    User          @relation(name: "RequestAuthor", fields: [authorId], references: [uid])
+  authorId  String
+  post      Post?         @relation(name: "RequestPost", fields: [postId], references: [uid])
+  postId    String?
 }

@@ -2,8 +2,9 @@ import { prisma } from '$lib/server/database/prisma';
 import { Logger } from 'tslog';
 import { type Job, MediaType } from '@prisma/client';
 import { Worker } from 'worker_threads';
+import { seedDatabase } from './tasks/seedDatabase';
 
-const log = new Logger({
+export const log = new Logger({
 	name: 'CMS',
 	prettyLogTemplate:
 		'{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t'
@@ -29,6 +30,9 @@ let runningJobs: cmsJob[] = [];
 setInterval(async () => {
 	await checkForNewJobs();
 }, 30_000);
+
+seedDatabase();
+
 checkForNewJobs();
 
 async function checkForNewJobs() {
@@ -54,7 +58,8 @@ async function checkForNewJobs() {
 					uid: dbJob.uid
 				},
 				data: {
-					status: 'RUNNING'
+					status: 'RUNNING',
+					createdAt: new Date()
 				},
 				include: {
 					media: {

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 			isDeleted: false
 		},
 		orderBy: {
-			createdAt: 'desc'
+			updatedAt: 'desc'
 		},
 		skip: (pagination.current - 1) * 20,
 		take: 20,

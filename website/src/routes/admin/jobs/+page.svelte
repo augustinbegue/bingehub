@@ -2,9 +2,34 @@
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pagination from '$lib/components/pagination/pagination.svelte';
+	import { addAlert } from '$lib/modules/interaction/alerter';
+	import type { Job } from '@prisma/client';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	async function retryJob(jobId: string) {
+		const res = await fetch(`/api/jobs/${jobId}/retry`, { method: 'POST' });
+
+		if (res.ok) {
+			const job: Job = await res.json();
+
+			data.jobs = data.jobs.map((j) => {
+				console.log(j.uid, job.uid);
+
+				if (j.uid === job.uid) {
+					j.status = job.status;
+				}
+
+				return j;
+			});
+		} else {
+			addAlert({
+				type: 'error',
+				message: 'Failed to retry job'
+			});
+		}
+	}
 </script>
 
 <div class="flex flex-col">
@@ -56,7 +81,7 @@
 						<td>
 							{#if job.status === 'FAILED'}
 								<kbd class="text-error">
-									{job.error}
+									{job.error?.slice(0, 50)}
 								</kbd>
 							{:else}
 								<progress
@@ -73,7 +98,14 @@
 						<td>
 							<button class="btn btn-sm btn-error"> Stop </button>
 							{#if job.status === 'FAILED'}
-								<button class="btn btn-sm btn-primary"> Retry </button>
+								<button
+									class="btn btn-sm btn-primary"
+									on:click={() => {
+										retryJob(job.uid);
+									}}
+								>
+									Retry
+								</button>
 							{/if}
 						</td>
 					</tr>
