@@ -7,6 +7,9 @@
 		<li class:bordered={$page.url.pathname.endsWith('requests')}>
 			<a href="/admin/requests"> requests </a>
 		</li>
+		<li class:bordered={$page.url.pathname.endsWith('torrents')}>
+			<a href="/admin/torrents"> torrents </a>
+		</li>
 		<li class:bordered={$page.url.pathname.endsWith('media')}>
 			<a href="/admin/media"> media </a>
 		</li>

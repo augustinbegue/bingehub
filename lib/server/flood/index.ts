@@ -1,4 +1,13 @@
 export const FloodEndpoint = process.env['FLOOD_URL'];
+export let floodCookie: string | undefined;
+
+export function setCookie(cookie?: string) {
+	floodCookie = cookie;
+}
+
+export function clearCookie() {
+	floodCookie = undefined;
+}
 
 export interface FloodTorrent {
 	hash: string;
