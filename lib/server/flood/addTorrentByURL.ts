@@ -1,7 +1,12 @@
-import { FloodEndpoint } from '.';
+import { FloodEndpoint, floodCookie } from '.';
 
 export async function addTorrentByURL(url: string) {
 	const response = await fetch(`${FloodEndpoint}/torrents/add-urls`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			cookie: floodCookie!
+		},
 		body: JSON.stringify({ urls: [url], tags: ['bingehub-managed'] })
 	});
 
