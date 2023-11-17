@@ -18,9 +18,14 @@ ffmpeg.setFfmpegPath(path);
 		job
 	}));
 
-	const mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
+	let mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
 	const filename = mediaPath.split('/').pop();
 	if (!filename) throw new Error('No filename found');
+
+	// replace /torrent with Z:/torrent if on windows
+	if (process.platform === 'win32') {
+		mediaPath = mediaPath.replace('/torrent', 'Z:/torrent');
+	}
 
 	const probe = await ffprobe(mediaPath, { path: ffprobeStatic.path });
 	const videoStream = probe.streams.find((stream) => stream.codec_type === 'video');
@@ -31,11 +36,11 @@ ffmpeg.setFfmpegPath(path);
 	];
 
 	// check for HDR
-	if (videoStream.pix_fmt === 'yuv420p10le') {
-		options.push(`-vf thumbnail,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p`);
-	} else {
-		options.push(`-vf thumbnail`);
-	}
+	// if (videoStream.pix_fmt === 'yuv420p10le') {
+	// 	options.push(`-vf thumbnail,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p`);
+	// } else {
+	options.push(`-vf thumbnail`);
+	// }
 
 	ffmpeg(mediaPath)
 		.outputOptions(options)

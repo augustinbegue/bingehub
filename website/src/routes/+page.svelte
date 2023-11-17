@@ -44,11 +44,11 @@
 {#if highlightedMedia}
 	<div class="hero bg-black">
 		<img
-			class="hero-image max-h-[75vh]"
+			class="hero-image max-h-[75vh] w-full object-fill"
 			src={highlightedMedia?.media?.thumbnailDataUrl}
 			alt={highlightedMedia?.title}
 		/>
-		<div class="hero-overlay bg-opacity-90" />
+		<div class="hero-overlay bg-opacity-80" />
 		<div class="hero-content text-neutral-content my-32">
 			<div>
 				<h1 class="mb-5 text-5xl font-bold">{highlightedMedia?.title}</h1>

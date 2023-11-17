@@ -67,8 +67,34 @@
 	</div>
 
 	{#each data.requests as request}
-		<div class="flex flex-row items-center justify-between p-4 m-4 rounded-md shadow-md">
+		<div
+			class="flex flex-row items-center justify-between p-4 m-4 rounded-md shadow-md border"
+			class:cursor-pointer={request.status === 'FULLFILLED'}
+			class:border-green-500={request.status === 'FULLFILLED'}
+			class:border-yellow-500={request.status === 'ACCEPTED'}
+			class:border-gray-500={request.status === 'PENDING'}
+			class:border-red-500={request.status === 'REJECTED'}
+		>
 			<div class="flex flex-row items-center">
+				<span class="mr-4">
+					{#if request.status === 'FULLFILLED'}
+						<span class="text-green-500">
+							<i class="fa-solid fa-film" />
+						</span>
+					{:else if request.status === 'ACCEPTED'}
+						<span class="text-yellow-500">
+							<i class="fa-solid fa-cloud-arrow-down" />
+						</span>
+					{:else if request.status === 'PENDING'}
+						<span class="text-gray-500">
+							<i class="fa-solid fa-hourglass-half" />
+						</span>
+					{:else if request.status === 'REJECTED'}
+						<span class="text-red-500">
+							<i class="fa-solid fa-xmark" />
+						</span>
+					{/if}
+				</span>
 				<code>{request.type}</code>
 				&nbsp;- {request.title}
 			</div>
