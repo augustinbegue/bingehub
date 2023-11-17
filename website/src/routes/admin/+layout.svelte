@@ -3,7 +3,7 @@
 </script>
 
 <div class="container mx-auto flex flex-row h-full">
-	<ul class="menu bg-base-100 w-56 p-2 rounded-box font-medium">
+	<ul class="menu bg-base-100 w-[10rem] p-2 rounded-box font-medium min-w-[10rem]">
 		<li class:bordered={$page.url.pathname.endsWith('requests')}>
 			<a href="/admin/requests"> requests </a>
 		</li>

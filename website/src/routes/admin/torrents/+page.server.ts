@@ -12,8 +12,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 	await authenticate(process.env.FLOOD_USERNAME, process.env.FLOOD_PASSWORD);
 	const torrents = await listTorrents();
 
-	console.log(torrents);
-
 	return {
 		torrents
 	};

@@ -10,6 +10,7 @@ export interface RequestEditBody {
 	type?: RequestType;
 	content?: string;
 	postId?: string;
+	torrent?: string;
 }
 
 export interface RequestEditResponse {

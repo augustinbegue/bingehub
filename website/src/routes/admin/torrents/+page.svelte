@@ -6,8 +6,6 @@
 	let hashes: string[] = [];
 
 	onMount(() => {
-		console.log(data);
-
 		for (const key in data.torrents) {
 			hashes = [...hashes, key];
 		}
@@ -19,24 +17,25 @@
 		<table class="table table-zebra w-full">
 			<thead>
 				<tr>
-					<th>Name</th>
+					<th>File</th>
 					<th>Completed</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each hashes as hash}
 					{@const torrent = data.torrents[hash]}
-
-					<tr>
-						<td>
-							{torrent.name}
-						</td>
-						<td>
-							{torrent.status.includes('complete')
-								? '✅'
-								: `❌ ${torrent.status}: ${torrent.downRate}`}
-						</td>
-					</tr>
+					{#if torrent.tags.includes('bingehub-managed')}
+						<tr>
+							<td>
+								{torrent.directory}/{torrent.name}
+							</td>
+							<td>
+								{torrent.status.includes('complete')
+									? '✅'
+									: `❌ ${torrent.status}: ${torrent.downRate}`}
+							</td>
+						</tr>
+					{/if}
 				{/each}
 			</tbody>
 		</table>

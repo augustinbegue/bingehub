@@ -149,6 +149,7 @@ enum RequestStatus {
   PENDING
   ACCEPTED
   FULLFILLED
+  COMPLETED
   REJECTED
 }
 
@@ -167,4 +168,5 @@ model Request {
   authorId  String
   post      Post?         @relation(name: "RequestPost", fields: [postId], references: [uid])
   postId    String?
+  torrent   String?
 }

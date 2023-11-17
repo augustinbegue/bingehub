@@ -2,19 +2,20 @@ import { FloodEndpoint, floodCookie } from '.';
 import { getClientSettings } from './getClientSettings';
 import { join } from 'path';
 
-export async function addTorrentByURL(urls: string[]) {
+export async function addTorrentByFiles(files: string[]) {
 	const settings = await getClientSettings();
 
-	const response = await fetch(`${FloodEndpoint}/torrents/add-urls`, {
+	const destination = settings.directoryDefault + '/bingehub-managed';
+	const response = await fetch(`${FloodEndpoint}/torrents/add-files`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			Cookie: floodCookie!
+			cookie: floodCookie!
 		},
 		body: JSON.stringify({
-			urls,
+			files,
 			tags: ['bingehub-managed'],
-			destination: join(settings.directoryDefault, 'bingehub-managed'),
+			destination,
 			start: true
 		}),
 		credentials: 'include'
