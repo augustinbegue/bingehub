@@ -1,4 +1,6 @@
 import { prisma } from '$lib/server/database/prisma';
+import type { FloodTorrent } from '$lib/server/flood';
+import { getTorrentByHash } from '$lib/server/flood/getTorrentByHash';
 import type { IPagination } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
@@ -35,8 +37,21 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 		})) / 20
 	);
 
+	const torrents: FloodTorrent[] = [];
+
+	for (let i = 0; i < requests.length; i++) {
+		const request = requests[i];
+
+		if (request.torrent) {
+			console.log(request.torrent);
+
+			torrents.push(await getTorrentByHash(request.torrent));
+		}
+	}
+
 	return {
 		requests,
-		pagination
+		pagination,
+		torrents
 	};
 };
