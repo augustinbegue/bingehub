@@ -20,10 +20,7 @@ const { exec } = require('node:child_process');
         job
     }));
 
-    let mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
-    const fileSharePath = '/mnt/silverstone';
-    mediaPath = join(fileSharePath, mediaPath);
-
+    const mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
     const filename = mediaPath.split('/').pop();
     if (!filename) throw new Error('No filename found');
     const outDir = join(mediaPath.split('/').slice(0, -1).join('/'), filename.split('.').slice(0, -1).join('.').replace(/\s/g, '.'));

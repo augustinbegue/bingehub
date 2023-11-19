@@ -21,9 +21,11 @@
         "cms"
     ],
     "devDependencies": {
+        "@types/nprogress": "^0.2.3",
         "concurrently": "^7.3.0"
     },
     "dependencies": {
-        "@prisma/client": "^4.13.0"
+        "@prisma/client": "^4.13.0",
+        "nprogress": "^0.2.0"
     }
 }
