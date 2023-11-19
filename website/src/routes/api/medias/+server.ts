@@ -29,11 +29,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			isDeleted: false,
 			type: 'MEDIA'
 		},
-		include: {
-			media: true
-		},
-		take: pageLength,
-		skip: (pagination.current - 1) * pageLength,
+		// take: pageLength,
+		// skip: (pagination.current - 1) * pageLength,
 		orderBy: [
 			{
 				title: 'desc'
