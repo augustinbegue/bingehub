@@ -5,7 +5,5 @@ export async function getTorrentByHash(hash: string) {
 	await authenticate(process.env.FLOOD_USERNAME, process.env.FLOOD_PASSWORD);
 	const torrents = await listTorrents();
 
-	console.log(torrents[hash]);
-
 	return torrents[hash];
 }

@@ -43,8 +43,6 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 		const request = requests[i];
 
 		if (request.torrent) {
-			console.log(request.torrent);
-
 			torrents.push(await getTorrentByHash(request.torrent));
 		}
 	}

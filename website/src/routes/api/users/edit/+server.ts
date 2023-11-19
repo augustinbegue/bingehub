@@ -1,8 +1,13 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/database/prisma';
+import { hasRole } from '$lib/modules/auth/utils';
 
 export const PATCH: RequestHandler = async ({ locals, request }) => {
+	if (!hasRole('admin', locals.user)) {
+		throw error(403, 'Forbidden');
+	}
+
 	const userBody = (await request.json()) as {
 		uid: string;
 		username: string;

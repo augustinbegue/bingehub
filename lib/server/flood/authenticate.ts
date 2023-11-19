@@ -22,7 +22,6 @@ export async function authenticate(username?: string, password?: string) {
 	});
 
 	if (!response.ok) {
-		console.log(await response.json());
 		throw new Error(`Failed to authenticate: ${response.statusText}`);
 	}
 

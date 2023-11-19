@@ -6,8 +6,6 @@ import { prisma } from '$lib/server/database/prisma';
 export const GET: RequestHandler = async ({ locals, url }) => {
 	const query = url.searchParams.get('q') ?? '';
 
-	console.log('query', query);
-
 	if (!isLogged(locals.user)) {
 		throw error(401, 'Unauthorized');
 	}
