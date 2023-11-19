@@ -24,20 +24,11 @@
 
 <header class="navbar bg-base-300 shrink-0">
 	<div class="navbar-start">
-		<a class="btn btn-ghost font-bold text-lg normal-case" href="/">
+		<a class="btn btn-ghost font-bold text-lg normal-case" href="/admin">
 			<span class="mr-1">Binge</span>
 			<span class="px-1 py-1/2 bg-primary rounded-md text-black">hub</span>
+			<span class="ml-1 text-primary"> Admin </span>
 		</a>
-	</div>
-	<div class="hidden md:flex navbar-center">
-		<ul class="menu menu-horizontal px-1">
-			<li>
-				<a href="/search">search</a>
-			</li>
-			<li>
-				<a href="/requests">requests</a>
-			</li>
-		</ul>
 	</div>
 	<div class="navbar-end">
 		{#if $currentUser != null}
@@ -54,9 +45,9 @@
 					</li>
 					{#if isAdmin}
 						<li>
-							<a href="/admin">
+							<a href="/">
 								<i class="fa-solid fa-arrow-up-right-from-square" />
-								admin settings
+								app
 							</a>
 						</li>
 					{/if}

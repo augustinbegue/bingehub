@@ -16,6 +16,8 @@
 				break;
 			case 'error':
 				break;
+			case 'inactive':
+				break;
 			default:
 				break;
 		}

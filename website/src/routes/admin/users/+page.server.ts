@@ -19,7 +19,8 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 				select: {
 					uid: true
 				}
-			}
+			},
+			subscription: true
 		},
 		where: {
 			isDeleted: false

@@ -19,7 +19,12 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	const user = await prisma.user.create({
 		data: {
 			username,
-			password: await hashPassword(password)
+			password: await hashPassword(password),
+			subscription: {
+				create: {
+					expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+				}
+			}
 		},
 		select: {
 			createdAt: true,

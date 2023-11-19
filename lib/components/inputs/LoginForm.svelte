@@ -40,6 +40,12 @@
 			return;
 		}
 
+		if (response.status === 403) {
+			passwordError = 'Your account is inactive.';
+			onLogin('inactive');
+			return;
+		}
+
 		if (response.status !== 200) {
 			passwordError = 'Something went wrong.';
 			onLogin('error');

@@ -17,6 +17,14 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		throw error(401, 'Invalid username or password');
 	}
 
+	if (user.isDeleted) {
+		throw error(401, 'Invalid username or password');
+	}
+
+	if (!user.isActive) {
+		throw error(403, 'Your account is not active');
+	}
+
 	// Check if the password matches
 	const passwordMatch = await comparePassword(password, user.password);
 
