@@ -21,12 +21,8 @@ const { exec } = require('node:child_process');
     }));
 
     let mediaPath = job.data.media.originalUrl.replace(/\\/g, '/');
-
-    // If host is linux, add file share path
-    if (process.platform === 'linux') {
-        const fileSharePath = '/mnt/silverstone';
-        mediaPath = join(fileSharePath, mediaPath);
-    }
+    const fileSharePath = '/mnt/silverstone';
+    mediaPath = join(fileSharePath, mediaPath);
 
     const filename = mediaPath.split('/').pop();
     if (!filename) throw new Error('No filename found');
