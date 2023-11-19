@@ -15,7 +15,7 @@
 	<a
 		href="/"
 		class:active={url?.toString().indexOf('/search') === -1 &&
-			url?.toString().indexOf('/new') === -1}
+			url?.toString().indexOf('/requests') === -1}
 	>
 		<i class="fa-solid fa-play" />
 	</a>

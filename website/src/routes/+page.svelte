@@ -42,9 +42,9 @@
 </script>
 
 {#if highlightedMedia}
-	<div class="hero bg-black">
+	<div class="hidden md:hero bg-black">
 		<img
-			class="hero-image max-h-[75vh] w-full object-fill"
+			class="hero-image max-h-[75vh] w-full object-cover"
 			src={highlightedMedia?.media?.thumbnailDataUrl}
 			alt={highlightedMedia?.title}
 		/>
@@ -56,9 +56,20 @@
 			</div>
 		</div>
 	</div>
+	<div class="mx-2 mt-8 md:hidden">
+		<div class="card shadow-xl image-full">
+			<figure>
+				<img src={highlightedMedia?.media?.thumbnailDataUrl} alt={highlightedMedia?.title} />
+			</figure>
+			<div class="card-body justify-end">
+				<h2 class="card-title">{highlightedMedia?.title}</h2>
+				<a class="btn btn-primary" href="/watch/{highlightedMedia?.uid}">Watch</a>
+			</div>
+		</div>
+	</div>
 {/if}
 
-<div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+<div class="mx-2 md:container md:mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
 	{#each medias as media, i}
 		<div class="card shadow-xl image-full">
 			<figure><img src={media.media?.thumbnailDataUrl} alt={media.title} /></figure>

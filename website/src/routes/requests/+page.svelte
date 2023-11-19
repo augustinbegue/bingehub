@@ -68,7 +68,7 @@
 
 	{#each data.requests as request}
 		<div
-			class="flex flex-row items-center justify-between p-4 m-4 rounded-md shadow-md border"
+			class="flex flex-col md:flex-row md:items-center justify-between p-4 m-4 rounded-md shadow-md border"
 			class:cursor-pointer={request.status === 'FULLFILLED'}
 			class:border-green-500={request.status === 'FULLFILLED'}
 			class:border-yellow-500={request.status === 'ACCEPTED'}

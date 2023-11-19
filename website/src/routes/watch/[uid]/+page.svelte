@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import Player from '$lib/components/media/Player.svelte';
+	import { isAndroidDevice, isIOSDevice } from '$lib/utils/deviceCheck';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -30,6 +31,33 @@
 			>
 				<i class="fa-solid fa-copy" /> Copy stream link
 			</button>
+
+			<!-- Open in VLC Button IOS -->
+			{#if browser && isIOSDevice()}
+				<button
+					class="btn btn-sm btn-primary gap-2"
+					on:click={() => {
+						window.open(
+							`vlc-x-callback://x-callback-url/stream?url=${encodeURIComponent(
+								`${$page.url.origin}/api/medias/${data.media.uid}/static`
+							)}`
+						);
+					}}
+				>
+					<i class="fa-solid fa-external-link" /> Open in VLC
+				</button>
+			{/if}
+			<!-- Open in VLC Button Android -->
+			{#if browser && isAndroidDevice()}
+				<button
+					class="btn btn-sm btn-primary gap-2"
+					on:click={() => {
+						window.open(`vlc://${$page.url.origin}/api/medias/${data.media.uid}/static`);
+					}}
+				>
+					<i class="fa-solid fa-external-link" /> Open in VLC
+				</button>
+			{/if}
 
 			The stream link can be opened in VLC or any other media player. Use this if the video player
 			above doesn't work.
