@@ -9,17 +9,12 @@ COPY cms/package*.json ./cms/
 COPY website/package*.json ./website/
 
 # Install dependencies
-RUN npm install --workspace=website
+RUN npm ci --workspace=website
 
 # Copy source code
 COPY . .
 
-# Generate prisma client
-RUN npx prisma generate
-
 # Build website
+RUN npm run build --workspace=website
 WORKDIR /app/website
-
-RUN npm run build
-
 CMD ["npm", "run", "start"]

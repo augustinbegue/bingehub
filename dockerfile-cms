@@ -9,20 +9,15 @@ COPY cms/package*.json ./cms/
 COPY website/package*.json ./website/
 
 # Install dependencies
-RUN npm install --workspace=cms
+RUN npm ci --workspace=cms
 
 # Copy source code
 COPY . .
 
-# Generate prisma client
-RUN npx prisma generate
-
 # Install ffmpeg
 RUN apk add  --no-cache ffmpeg
 
+# Build website
+RUN npm run build --workspace=cms
 WORKDIR /app/cms
-
-# Build cms
-RUN npm run build
-
 CMD ["npm", "run", "start"]
