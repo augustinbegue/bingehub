@@ -5,6 +5,7 @@
 	import { alerts } from '$lib/modules/interaction/alerter';
 	import type { Subscription } from '@prisma/client';
 	import type { PageData } from './$types';
+	import { invalidate, invalidateAll } from '$app/navigation';
 
 	let createUserModal: Modal;
 	let editUserModal: Modal;
@@ -47,8 +48,7 @@
 		});
 
 		if (res.ok) {
-			console.log(await res.json());
-
+			await invalidateAll();
 			alerts.update((alerts) => [...alerts, { type: 'success', message: 'User created' }]);
 			createUserModal.close();
 			window.open(
@@ -66,8 +66,7 @@
 		});
 
 		if (res.ok) {
-			console.log(await res.json());
-
+			await invalidateAll();
 			alerts.update((alerts) => [...alerts, { type: 'success', message: 'User updated' }]);
 			editUserModal.close();
 		} else {
@@ -137,7 +136,17 @@
 					<td>{user.createdAt.toLocaleString()}</td>
 					<td>{user.updatedAt.toLocaleString()}</td>
 					<td>
-						<input class="toggle" type="checkbox" bind:checked={user.isActive} />
+						<input
+							class="toggle"
+							type="checkbox"
+							checked={user.isActive}
+							on:click={async () => {
+								modalUser = user;
+								modalUser.isActive = !modalUser.isActive;
+								console.log(modalUser);
+								await editUser();
+							}}
+						/>
 					</td>
 					<td>
 						{#if user.subscription}

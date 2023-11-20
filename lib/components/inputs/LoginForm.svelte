@@ -37,18 +37,21 @@
 		if (response.status === 401) {
 			passwordError = 'Invalid username or password.';
 			onLogin('error');
+			loading = false;
 			return;
 		}
 
 		if (response.status === 403) {
 			passwordError = 'Your account is inactive.';
 			onLogin('inactive');
+			loading = false;
 			return;
 		}
 
 		if (response.status !== 200) {
 			passwordError = 'Something went wrong.';
 			onLogin('error');
+			loading = false;
 			return;
 		}
 
@@ -57,6 +60,7 @@
 			currentUser.set(user);
 
 			onLogin('success');
+			loading = false;
 		}
 	}
 
