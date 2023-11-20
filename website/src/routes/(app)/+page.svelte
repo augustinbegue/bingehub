@@ -32,10 +32,13 @@
 	let movies: Post[] = [];
 	let series: {
 		title: string;
-		entries: {
+		seasons: {
 			season: number;
-			episode: number;
-			uid: string;
+			entries: {
+				season: number;
+				episode: number;
+				uid: string;
+			}[];
 		}[];
 	}[] = [];
 	function orderMedia() {
@@ -54,32 +57,54 @@
 				if (seriesIndex === -1) {
 					series.push({
 						title,
-						entries: [
+						seasons: [
 							{
 								season,
-								episode,
-								uid: medias[i].uid
+								entries: [
+									{
+										uid: medias[i].uid,
+										season,
+										episode
+									}
+								]
 							}
 						]
 					});
 				} else {
-					series[seriesIndex].entries.push({
-						season,
-						episode,
-						uid: medias[i].uid
-					});
+					let seasonIndex = series[seriesIndex].seasons.findIndex((s) => s.season === season);
+
+					if (seasonIndex === -1) {
+						series[seriesIndex].seasons.push({
+							season,
+							entries: [
+								{
+									uid: medias[i].uid,
+									season,
+									episode
+								}
+							]
+						});
+					} else {
+						series[seriesIndex].seasons[seasonIndex].entries.push({
+							uid: medias[i].uid,
+							season,
+							episode
+						});
+					}
 				}
 			}
 		}
 
 		for (let i = 0; i < series.length; i++) {
-			series[i].entries.sort((a, b) => {
-				if (a.season === b.season) {
-					return a.episode - b.episode;
-				} else {
-					return a.season - b.season;
-				}
-			});
+			const serie = series[i];
+
+			serie.seasons.sort((a, b) => a.season - b.season);
+
+			for (let j = 0; j < serie.seasons.length; j++) {
+				const season = serie.seasons[j];
+
+				season.entries.sort((a, b) => a.episode - b.episode);
+			}
 		}
 
 		highlightedMedia = movies[0];
@@ -141,20 +166,28 @@
 	<div class="flex flex-col">
 		{#each series as serie}
 			<h2 class="text-lg md:text-2xl font-semibold mt-2 mb-1">{serie.title}</h2>
-			<div class="flex flex-row overflow-x-scroll overflow-y-clip relative h-40 md:h-64 rounded-lg">
-				<Thumbnail postUid={serie.entries[0].uid} className="h-40 md:h-64 z-10 rounded-xl" />
-				<Thumbnail
-					postUid={serie.entries[0].uid}
-					className="absolute z-0 object-center blur-2xl h-40 md:h-64 w-full object-cover"
-				/>
-				<div class="grid grid-rows-2 grid-flow-col gap-4 items-center p-4 z-10">
-					{#each serie.entries as entry}
-						<a class="btn btn-ghost w-36" href="/watch/{entry.uid}">
-							S{entry.season} Episode {entry.episode}
-						</a>
-					{/each}
+			{#each serie.seasons as season}
+				<h3 class="text-md font-semibold mt-1 mb-1">Season {season.season}</h3>
+				<div
+					class="flex flex-row overflow-x-scroll overflow-y-clip relative h-40 md:h-64 rounded-lg"
+				>
+					<Thumbnail
+						postUid={season.entries[0].uid}
+						className="h-40 md:h-64 z-10 rounded-xl aspect-video"
+					/>
+					<Thumbnail
+						postUid={season.entries[0].uid}
+						className="absolute z-0 object-center blur-2xl h-40 md:h-64 w-full object-cover"
+					/>
+					<div class="grid grid-rows-2 grid-flow-col gap-4 items-center p-4 z-10">
+						{#each season.entries as entry}
+							<a class="btn btn-ghost w-36" href="/watch/{entry.uid}">
+								S{entry.season} Episode {entry.episode}
+							</a>
+						{/each}
+					</div>
 				</div>
-			</div>
+			{/each}
 		{/each}
 	</div>
 </div>
