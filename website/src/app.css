@@ -5,3 +5,15 @@
 body {
     @apply min-h-screen;
 }
+
+*::-webkit-scrollbar {
+    width: 1em;
+}
+ 
+*::-webkit-scrollbar-track {
+    @apply bg-base-100 rounded-full border-base-200 border;
+}
+ 
+*::-webkit-scrollbar-thumb {
+    @apply bg-base-200 rounded-full;
+}

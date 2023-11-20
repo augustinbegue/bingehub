@@ -168,9 +168,7 @@
 			<h2 class="text-lg md:text-2xl font-semibold mt-2 mb-1">{serie.title}</h2>
 			{#each serie.seasons as season}
 				<h3 class="text-md font-semibold mt-1 mb-1">Season {season.season}</h3>
-				<div
-					class="flex flex-row overflow-x-scroll overflow-y-clip relative h-40 md:h-64 rounded-lg"
-				>
+				<div class="flex flex-row overflow-x-auto overflow-y-clip relative h-40 md:h-64 rounded-lg">
 					<Thumbnail
 						postUid={season.entries[0].uid}
 						className="h-40 md:h-64 z-10 rounded-xl aspect-video"
