@@ -4,6 +4,9 @@
 	import { page } from '$app/stores';
 </script>
 
+<svelte:head>
+	<title>BingeHub</title>
+</svelte:head>
 <Header />
 <main class="flex flex-col grow">
 	<slot />

@@ -29,10 +29,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>BingeHub</title>
-</svelte:head>
-
 <Alerter />
 <div class="min-h-screen flex flex-col justify-between">
 	<slot />

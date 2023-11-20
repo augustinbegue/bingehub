@@ -112,23 +112,23 @@
 		<Spinner />
 	{/if}
 </div>
-<div class="mx-2 mt-8 md:hidden">
-	<div class="card shadow-xl image-full">
+<div class="md:hidden">
+	<a class="hero aspect-[21/9]" href="/watch/{highlightedMedia?.uid}">
 		{#if highlightedMedia}
-			<figure class="aspect-video">
-				<Thumbnail postUid={highlightedMedia.uid} />
-			</figure>
-			<div class="card-body justify-end">
-				<h2 class="card-title">{highlightedMedia?.title}</h2>
-				<a class="btn btn-primary" href="/watch/{highlightedMedia?.uid}">Watch</a>
+			<Thumbnail postUid={highlightedMedia.uid} className="hero-image object-cover aspect-[21/9]" />
+			<div class="hero-overlay bg-opacity-60" />
+			<div class="hero-content text-neutral-content">
+				<div>
+					<h2 class="text-2xl font-bold">{highlightedMedia?.title}</h2>
+				</div>
 			</div>
 		{/if}
-	</div>
+	</a>
 </div>
 
 <div class="container mx-auto p-4">
 	<!-- Movie List -->
-	<h1 class="text-3xl md:text-4xl font-bold mt-8">Movies</h1>
+	<h1 class="text-2xl md:text-4xl font-bold mt-8">Movies</h1>
 	<div
 		class="grid grid-rows-1 grid-flow-col gap-2 overflow-x-scroll min-h-[10rem] md:min-h-[16rem] p-2"
 	>
@@ -137,10 +137,10 @@
 		{/each}
 	</div>
 
-	<h1 class="text-3xl md:text-4xl font-bold mt-8">Series</h1>
+	<h1 class="text-2xl md:text-4xl font-bold mt-8">Series</h1>
 	<div class="flex flex-col">
 		{#each series as serie}
-			<h2 class="text-2xl font-semibold">{serie.title}</h2>
+			<h2 class="text-lg md:text-2xl font-semibold mt-2 mb-1">{serie.title}</h2>
 			<div class="flex flex-row overflow-x-scroll overflow-y-clip relative h-40 md:h-64 rounded-lg">
 				<Thumbnail postUid={serie.entries[0].uid} className="h-40 md:h-64 z-10 rounded-xl" />
 				<Thumbnail
@@ -149,7 +149,7 @@
 				/>
 				<div class="grid grid-rows-2 grid-flow-col gap-4 items-center p-4 z-10">
 					{#each serie.entries as entry}
-						<a class="btn btn-ghost" href="/watch/{entry.uid}">
+						<a class="btn btn-ghost w-36" href="/watch/{entry.uid}">
 							S{entry.season} Episode {entry.episode}
 						</a>
 					{/each}

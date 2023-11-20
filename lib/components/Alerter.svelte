@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { alerts } from '$lib/modules/interaction/alerter';
+	import { onMount } from 'svelte';
 </script>
 
-<div class="fixed bottom-0 p-4 w-full z-[1000]">
+<div class="fixed top-0 p-4 w-full z-[1000]">
 	<div class=" container mx-auto">
 		{#each $alerts as alert, i}
 			<div
-				class="alert shadow-lg m-2"
+				class="py-4 px-6 rounded-full shadow-lg m-2 flex flex-row justify-between items-center"
 				class:alert-info={alert.type === 'info'}
 				class:alert-success={alert.type === 'success'}
 				class:alert-warning={alert.type === 'warning'}
@@ -27,18 +28,17 @@
 					{/if}
 					<span>{@html alert.message}</span>
 				</div>
-				<div class="flex-none">
-					<button
-						class="btn btn-sm btn-ghost btn-primary"
-						on:click={() => {
-							alerts.update((alerts) => {
-								return alerts.filter((a, j) => j !== i);
-							});
-						}}
-					>
-						<i class="fas fa-times" />
-					</button>
-				</div>
+
+				<button
+					class="btn btn-sm h-full btn-ghost btn-primary my-auto"
+					on:click={() => {
+						alerts.update((alerts) => {
+							return alerts.filter((a, j) => j !== i);
+						});
+					}}
+				>
+					<i class="fas fa-times" />
+				</button>
 			</div>
 		{/each}
 	</div>
