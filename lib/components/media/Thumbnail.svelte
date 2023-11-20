@@ -5,6 +5,11 @@
 	export let className: string = '';
 	async function fetchThumbnail(uid: string) {
 		const res = await fetch(`/api/medias/${uid}/thumbnail`);
+
+		if (!res.ok) {
+			throw new Error('Failed to fetch thumbnail');
+		}
+
 		return await res.text();
 	}
 </script>
@@ -14,7 +19,11 @@
 		<Spinner />
 	</div>
 {:then thumbnail}
-	<img src={thumbnail} class={className} alt="Thumbnail" />
+	{#if thumbnail.length > 0}
+		<img src={thumbnail} class={className} alt="Thumbnail" />
+	{:else}
+		<img src="/images/placeholder.jpg" class={className} alt="Thumbnail" />
+	{/if}
 {:catch error}
-	<img src="/images/placeholder.png" alt="Thumbnail" />
+	<img src="/images/placeholder.jpg" alt="Thumbnail" />
 {/await}

@@ -33,7 +33,7 @@
 	<div class="navbar-end">
 		{#if $currentUser != null}
 			<div class="dropdown dropdown-end">
-				<button tabindex="0" class="btn lowercase">
+				<button tabindex="0" class="btn btn-ghost lowercase">
 					<span class="text-base">@{$currentUser.username}</span>
 				</button>
 				<ul class="menu bg-base-200 dropdown-content p-2 shadow rounded-box w-52 mt-4">
@@ -45,7 +45,7 @@
 					</li>
 					{#if isAdmin}
 						<li>
-							<a href="/">
+							<a href="/" target="_blank">
 								<i class="fa-solid fa-arrow-up-right-from-square" />
 								app
 							</a>

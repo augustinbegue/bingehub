@@ -22,17 +22,26 @@
 	<p>
 		<span class="text-xl">password:</span> <span class="font-bold">{password}</span>
 	</p>
+	<br />
+	<a class="btn btn-ghost mb-2" href="/auth/login">Login</a>
 	<h2>Next steps</h2>
 	<p>Once you've logged in, we advise you to change your password by heading to the settings.</p>
-	<br />
-	<a class="btn btn-primary mb-2" href="/auth/login">Login</a>
 	<p>Enjoy the moutain of content you've just gained access to!</p>
+	<h2>Tips</h2>
+	<p>
+		Install <a href="https://www.videolan.org/" target="_blank">VLC</a> on your computer/phone to enjoy
+		the videos in the highest quality.
+	</p>
 </div>
 
 <style lang="postcss">
 	.container {
 		height: 100vh;
 		@apply text-center;
+	}
+
+	a {
+		@apply text-primary underline;
 	}
 
 	h1 {

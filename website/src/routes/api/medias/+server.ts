@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		throw error(401, 'Unauthorized');
 	}
 
-	const pageLength = parseInt(url.searchParams.get('count') ?? '9');
+	const pageLength = parseInt(url.searchParams.get('count') ?? '-1');
 	const pagination: IPagination = {
 		current: parseInt(url.searchParams.get('page') ?? '1'),
 		total: 0
@@ -29,8 +29,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			isDeleted: false,
 			type: 'MEDIA'
 		},
-		// take: pageLength,
-		// skip: (pagination.current - 1) * pageLength,
+		take: pageLength == -1 ? undefined : pageLength,
+		skip: pageLength == -1 ? undefined : (pagination.current - 1) * pageLength,
 		orderBy: [
 			{
 				createdAt: 'desc'

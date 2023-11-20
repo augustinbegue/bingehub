@@ -71,7 +71,7 @@
 
 <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-200">
 	<div class="card-body">
-		<form on:submit={loginWithUsernameAndPassword}>
+		<form>
 			<div class="form-control">
 				<label class="label" for="username">
 					<span class="label-text">Username</span>
@@ -109,7 +109,14 @@
 				</label>
 			</div>
 			<div class="form-control mt-6">
-				<input type="submit" class="btn btn-primary" value="Login" class:loading />
+				<button
+					class="btn btn-primary"
+					on:click={loginWithUsernameAndPassword}
+					class:loading
+					disabled={loading}
+				>
+					Login
+				</button>
 				<label class="label" for="submit">
 					<a href="#" class="label-text-alt link link-hover">Forgot password?</a>
 				</label>
