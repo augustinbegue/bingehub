@@ -78,7 +78,10 @@
 			const resData = (await res.json()) as AddTorrentResponse;
 
 			if (resData.length > 0) {
-				await updateRequest(requestUid, { status: 'FULLFILLED', torrent: resData[0] });
+				await updateRequest(requestUid, {
+					status: 'FULLFILLED',
+					torrent: resData[0].toUpperCase()
+				});
 				fullfillRequestModal.close();
 				alerts.update((m) => [...m, { type: 'success', message: 'Request fulfilled' }]);
 			}

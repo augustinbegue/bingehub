@@ -3,6 +3,10 @@
 	import AdminHeader from '$lib/components/header/AdminHeader.svelte';
 </script>
 
+<svelte:head>
+	<title>BingeHub | Admin</title>
+</svelte:head>
+
 <AdminHeader />
 <main class="flex flex-col grow">
 	<div class="container mx-auto flex flex-row h-full">

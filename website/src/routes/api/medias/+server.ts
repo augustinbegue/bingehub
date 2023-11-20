@@ -33,9 +33,6 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		// skip: (pagination.current - 1) * pageLength,
 		orderBy: [
 			{
-				title: 'desc'
-			},
-			{
 				createdAt: 'desc'
 			}
 		]

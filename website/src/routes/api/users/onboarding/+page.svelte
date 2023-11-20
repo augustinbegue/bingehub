@@ -5,6 +5,9 @@
 	let password = $page.url.searchParams.get('password');
 </script>
 
+<svelte:head>
+	<title>BingeHub</title>
+</svelte:head>
 <div class="container mx-auto flex flex-col items-center p-16">
 	<span class="font-bold text-4xl normal-case">
 		<span class="mr-1/2">Binge</span>

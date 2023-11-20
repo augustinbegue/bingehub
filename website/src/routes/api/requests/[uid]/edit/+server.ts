@@ -36,7 +36,8 @@ export const POST: RequestHandler = async ({ locals, request, params }) => {
 		throw error(400, 'Missing uid');
 	}
 
-	const { title, status, type, content, postId } = (await request.json()) as RequestEditBody;
+	const { title, status, type, content, postId, torrent } =
+		(await request.json()) as RequestEditBody;
 
 	if (!title && !status && !type && !content && !postId) {
 		throw error(400, 'Missing fields');
@@ -49,7 +50,8 @@ export const POST: RequestHandler = async ({ locals, request, params }) => {
 			status,
 			type,
 			content,
-			postId
+			postId,
+			torrent
 		},
 		include: {
 			author: {
