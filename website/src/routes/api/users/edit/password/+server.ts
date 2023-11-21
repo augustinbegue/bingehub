@@ -3,6 +3,7 @@ import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { prisma } from '$lib/server/database/prisma';
 import { comparePassword, hashPassword } from '$lib/server/auth';
+import { createEvent } from '$lib/server/database/utils';
 
 export const PATCH: RequestHandler = async ({ locals, request }) => {
 	if (!isLogged(locals.user) || !locals.user) {
@@ -41,6 +42,8 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
 			password: await hashPassword(newPassword)
 		}
 	});
+
+	await createEvent('USER_PASSWORD_CHANGE', user, {});
 
 	return json({
 		success: true

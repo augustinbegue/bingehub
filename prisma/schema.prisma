@@ -33,6 +33,30 @@ model User {
   jobs         Job[]         @relation(name: "JobUser")
   requests     Request[]     @relation(name: "RequestAuthor")
   subscription Subscription? @relation(name: "SubscriptionUser")
+  Event        Event[]       @relation(name: "EventUser")
+}
+
+enum EventType {
+  USER_LOGIN
+  USER_LOGOUT
+  USER_PASSWORD_CHANGE
+  USER_DISABLE
+  USER_ENABLE
+  USER_ROLE_CHANGE
+  MEDIA_WATCHED
+}
+
+model Event {
+  uid       String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  isActive  Boolean   @default(true)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  type      EventType
+  data      String
+  user      User      @relation(name: "EventUser", fields: [userId], references: [uid])
+  userId    String
 }
 
 // Represents a user's subscription. Lasts for 1 month.

@@ -2,8 +2,9 @@ import { prisma } from '$lib/server/database/prisma';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { comparePassword } from '$lib/server/auth';
+import { createEvent } from '$lib/server/database/utils';
 
-export const POST: RequestHandler = async ({ locals, request }) => {
+export const POST: RequestHandler = async ({ locals, request, getClientAddress }) => {
 	const { username, password } = await request.json();
 
 	const user = await prisma.user.findUnique({
@@ -53,6 +54,13 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		username: user.username,
 		isDeleted: user.isDeleted
 	};
+
+	createEvent('USER_LOGIN', user, {
+		from:
+			request.headers.get('x-forwarded-for') ||
+			request.headers.get('x-real-ip') ||
+			getClientAddress()
+	});
 
 	return json(
 		{

@@ -9,8 +9,17 @@
 
 <AdminHeader />
 <main class="flex flex-col grow">
-	<div class="container mx-auto flex flex-row h-full">
+	<div class="w-full flex flex-row h-full">
 		<ul class="menu bg-base-100 w-[10rem] p-2 rounded-box font-medium min-w-[10rem]">
+			<li class:bordered={$page.url.pathname.endsWith('users')}>
+				<a href="/admin/users"> users </a>
+			</li>
+			<li class:bordered={$page.url.pathname.endsWith('roles')}>
+				<a href="/admin/roles"> roles </a>
+			</li>
+			<li class:bordered={$page.url.pathname.endsWith('events')}>
+				<a href="/admin/events"> events </a>
+			</li>
 			<li class:bordered={$page.url.pathname.endsWith('requests')}>
 				<a href="/admin/requests"> requests </a>
 			</li>
@@ -22,12 +31,6 @@
 			</li>
 			<li class:bordered={$page.url.pathname.endsWith('jobs')}>
 				<a href="/admin/jobs"> jobs </a>
-			</li>
-			<li class:bordered={$page.url.pathname.endsWith('users')}>
-				<a href="/admin/users"> users </a>
-			</li>
-			<li class:bordered={$page.url.pathname.endsWith('roles')}>
-				<a href="/admin/roles"> roles </a>
 			</li>
 		</ul>
 		<div class="h-full w-full py-2">
