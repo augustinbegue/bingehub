@@ -42,10 +42,13 @@
 	<div class="navbar-end">
 		{#if $currentUser != null}
 			<div class="dropdown dropdown-end">
-				<button tabindex="0" class="btn btn-ghost lowercase">
+				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<label class="btn btn-ghost lowercase" tabindex="0">
 					<span class="text-base">@{$currentUser.username}</span>
-				</button>
-				<ul class="menu bg-base-200 dropdown-content p-2 shadow rounded-box w-52 mt-4">
+				</label>
+				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+				<ul tabindex="0" class="menu bg-base-200 p-2 shadow rounded-box w-52 mt-4 dropdown-content">
 					<li>
 						<a href="/settings">
 							<i class="fa-solid fa-cog" />

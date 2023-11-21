@@ -46,7 +46,7 @@
 	}
 </script>
 
-<div class="container mx-auto py-8 settings">
+<div class="container mx-auto px-4 py-8 settings">
 	<h1>Settings</h1>
 	<span class="divider" />
 	<h2>Security</h2>
