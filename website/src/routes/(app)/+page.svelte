@@ -42,12 +42,22 @@
 		}[];
 	}[] = [];
 	function orderMedia() {
+		console.log(medias);
+
 		for (let i = 0; i < medias.length; i++) {
 			if (medias[i].subType === 'MOVIE') {
 				movies.push(medias[i]);
 			} else if (medias[i].subType === 'SERIES') {
 				let res = /([\w ]*)S([0-9]{2}) - S[0-9]{2}E([0-9]{2})/g.exec(medias[i].title);
+				if (!res) {
+					res = /([\w& ]*) - S([0-9]{2})E([0-9]{2})/g.exec(medias[i].title);
+				}
+				if (!res) {
+					res = /([\w& ]*)S([0-9]{2})E([0-9]{2})/g.exec(medias[i].title);
+				}
+
 				if (!res) continue;
+
 				let title = res[1].trim();
 				let season = parseInt(res[2]);
 				let episode = parseInt(res[3]);
