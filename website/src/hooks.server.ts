@@ -1,7 +1,23 @@
 import { prisma } from '$lib/server/database/prisma';
+import { log } from '$lib/server/logger';
 import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle: Handle = async ({ event, resolve }) => {
+const accessLogger: Handle = async ({ event, resolve }) => {
+	log.info(`${event.request.method} ${event.url.pathname} from ${event.getClientAddress()}`);
+
+	const response = await resolve(event);
+
+	log.info(
+		`${response.status} ${event.url.pathname} ${response.headers.get(
+			'content-length'
+		)} to ${event.getClientAddress()}`
+	);
+
+	return response;
+};
+
+const sessionHandler: Handle = async ({ event, resolve }) => {
 	const { cookies, locals } = event;
 	const sessiondId = cookies.get('session');
 
@@ -28,3 +44,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return resolve(event);
 };
+
+export const handle = sequence(accessLogger, sessionHandler);

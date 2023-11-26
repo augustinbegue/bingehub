@@ -51,6 +51,7 @@
 		"prisma": "^4.13.0",
 		"range-parser": "^1.2.1",
 		"shaka-player": "^4.3.6",
-		"svelte-video-player": "^1.2.5"
+		"svelte-video-player": "^1.2.5",
+		"tslog": "^4.9.2"
 	}
 }
