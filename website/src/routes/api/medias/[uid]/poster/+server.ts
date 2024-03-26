@@ -26,14 +26,14 @@ export const GET: RequestHandler = async ({ locals, params }) => {
         }
     });
     if (!media || media.artworks.length < 0)
-        throw error(404, 'Thumbnail not found');
+        throw error(404, 'Poster not found');
 
-    const thumb = media.artworks.find(artwork => artwork.type === 'THUMBNAIL' || artwork.type === 'BACKGROUND');
+    const poster = media.artworks.find(artwork => artwork.type === 'POSTER');
 
-    if (!thumb)
-        throw error(404, 'Thumbnail not found');
+    if (!poster)
+        throw error(404, 'Poster not found');
 
-    return text(thumb.dataUrl, {
+    return text(poster.dataUrl, {
         headers: {
             'Content-Type': 'image/png'
         }

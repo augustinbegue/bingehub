@@ -18,7 +18,14 @@ export const load: PageServerLoad = async ({ parent, params, url }) => {
 			uid
 		},
 		include: {
-			media: true
+			media: true,
+			artworks: {
+				select: {
+					uid: true,
+					type: true,
+					dataUrl: true
+				}
+			}
 		}
 	});
 

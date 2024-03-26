@@ -5,7 +5,7 @@ import { hasRole } from '$lib/modules/auth/utils';
 
 export const POST: RequestHandler = async ({ params, request, locals }) => {
 	const { uid } = params;
-	const { title, content, type, subType, mediaType, mediaUrl, isActive, thumbnailDataURL } =
+	const { title, content, type, subType, mediaType, mediaUrl, isActive } =
 		await request.json();
 
 	if (!hasRole('admin', locals.user)) {
@@ -27,8 +27,7 @@ export const POST: RequestHandler = async ({ params, request, locals }) => {
 			media: {
 				update: {
 					type: mediaType,
-					url: mediaUrl,
-					thumbnailDataUrl: thumbnailDataURL
+					url: mediaUrl
 				}
 			}
 		}

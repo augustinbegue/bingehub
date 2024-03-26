@@ -1,6 +1,6 @@
 import { prisma } from '$lib/server/database/prisma';
 import { hashPassword } from '$lib/server/auth';
-import { log } from '..';
+import { log } from '../logger';
 
 export async function seedDatabase() {
 	try {
@@ -44,3 +44,5 @@ export async function seedDatabase() {
 		console.error('Failed to seed database');
 	}
 }
+
+seedDatabase();

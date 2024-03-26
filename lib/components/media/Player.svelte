@@ -8,8 +8,8 @@
 	export let source: string[] = [];
 	export let poster: string = '';
 
-	export let shakaPlayer: shaka.Player;
-	export let shakaUi: shaka.ui.Overlay;
+	let shakaPlayer: shaka.Player;
+	let shakaUi: shaka.ui.Overlay;
 
 	let dashFailed = false;
 

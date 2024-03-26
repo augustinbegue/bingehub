@@ -1,5 +1,5 @@
 import { prisma } from '$lib/server/database/prisma';
-import { log } from '..';
+import { log } from '../logger';
 export async function refreshSubscriptions() {
 	try {
 		log.info('Refreshing subscriptions');

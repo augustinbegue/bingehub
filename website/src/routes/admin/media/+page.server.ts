@@ -30,8 +30,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 				select: {
 					uid: true,
 					type: true,
-					url: true,
-					thumbnailDataUrl: true
+					url: true
+				}
+			},
+			artworks: {
+				select: {
+					uid: true,
+					type: true
 				}
 			}
 		}

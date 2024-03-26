@@ -11,7 +11,7 @@ services:
     env_file:
       - .env
     volumes:
-      - 'Z:\torrent:/torrent'
+      - 'Z:\torrent\downloads\complete:/library'
     user: '0:0'
   cms:
     build:
@@ -21,3 +21,5 @@ services:
     image: 'docker.hostag.fr/bingehub-cms:${npm_package_version}'
     env_file:
       - .env
+    volumes:
+      - 'Z:\torrent\downloads\complete:/library'

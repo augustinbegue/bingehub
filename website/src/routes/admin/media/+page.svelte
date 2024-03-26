@@ -95,8 +95,7 @@
 		subType: '',
 		mediaType: '',
 		mediaUrl: '',
-		isActive: true,
-		thumbnailDataURL: ''
+		isActive: true
 	};
 	async function editMedia() {
 		let res = await fetch(`/api/medias/${editedMedia.uid}/edit`, {
@@ -254,7 +253,6 @@
 					</th>
 					<th>Title</th>
 					<th>Transcoded</th>
-					<th>Thumbnail</th>
 					<th>Created @</th>
 					<th>Updated @</th>
 					<th>Active</th>
@@ -279,13 +277,6 @@
 								<span class="badge badge-error">No</span>
 							{/if}
 						</td>
-						<td>
-							{#if post.media?.thumbnailDataUrl?.length}
-								<span class="badge badge-success">Yes</span>
-							{:else}
-								<span class="badge badge-error">No</span>
-							{/if}
-						</td>
 						<td>{post.createdAt.toLocaleString()}</td>
 						<td>{post.updatedAt.toLocaleString()}</td>
 						<td>
@@ -304,8 +295,7 @@
 											subType: post.subType,
 											mediaType: post.media?.type ?? '',
 											mediaUrl: post.media?.url ?? '',
-											isActive: post.isActive,
-											thumbnailDataURL: post.media?.thumbnailDataUrl ?? ''
+											isActive: post.isActive
 										};
 
 										editMediaModal.open();
@@ -414,12 +404,6 @@
 			<span class="label-text">Media url</span>
 		</label>
 		<textarea name="mUrl" class="textarea textarea-bordered" bind:value={editedMedia.mediaUrl} />
-	</div>
-	<div class="form-control mt-6">
-		<label for="mThumb">
-			<span class="label-text">Thumbnail</span>
-		</label>
-		<ImagePickerDragAndDrop bind:dataUrl={editedMedia.thumbnailDataURL} />
 	</div>
 	<div>
 		<label class="cursor-pointer label">

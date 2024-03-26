@@ -1,13 +1,8 @@
-import { Logger } from 'tslog';
 import { seedDatabase } from './tasks/seedDatabase';
 import { checkForNewJobs } from './tasks/checkForNewJobs';
 import { refreshSubscriptions } from './tasks/refreshSubscriptions';
-
-export const log = new Logger({
-	name: 'CMS',
-	prettyLogTemplate:
-		'{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t'
-});
+// import { importNewMedia } from './tasks/importNewMedia';
+import { log } from './logger';
 
 log.info(`Starting CMS`);
 
@@ -32,7 +27,12 @@ export const scheduledTasks: ScheduledTask[] = [
 		name: 'Refresh subscriptions',
 		run: refreshSubscriptions,
 		interval: 1000 * 60 * 60 * 24 // 1 day
-	}
+	},
+	// {
+	// 	name: 'Check for new media',
+	// 	run: importNewMedia,
+	// 	interval: 1000 * 60 * 60 // 1 hour
+	// }
 ];
 
 // Check for new jobs every 30 seconds

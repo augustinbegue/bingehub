@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import Thumbnail from '$lib/components/media/Thumbnail.svelte';
+	import Poster from '$lib/components/media/Poster.svelte';
 	import Preview from '$lib/components/media/Preview.svelte';
 
 	export let data: PageData;
@@ -135,11 +136,13 @@
 <!-- Highlighted Movie -->
 <div class="hidden md:hero bg-black aspect-[21/9] w-full">
 	{#if highlightedMedia}
-		<Thumbnail postUid={highlightedMedia.uid} className="hero-image object-cover aspect-[21/9]" />
+		<Thumbnail postUid={highlightedMedia.uid} className="object-cover aspect-[21/9] w-full" />
 		<div class="hero-overlay bg-opacity-80" />
 		<div class="hero-content text-neutral-content my-32">
+			<Poster postUid={highlightedMedia.uid} className="w-64 rounded-xl" />
 			<div>
-				<h1 class="mb-5 text-5xl font-bold">{highlightedMedia?.title}</h1>
+				<h1 class="mb-2 text-5xl font-bold">{highlightedMedia?.title}</h1>
+				<p class="mb-5">{highlightedMedia.content}</p>
 				<a class="btn btn-primary" href="/watch/{highlightedMedia?.uid}">Watch</a>
 			</div>
 		</div>
@@ -150,7 +153,7 @@
 <div class="md:hidden">
 	<a class="hero aspect-[21/9]" href="/watch/{highlightedMedia?.uid}">
 		{#if highlightedMedia}
-			<Thumbnail postUid={highlightedMedia.uid} className="hero-image object-cover aspect-[21/9]" />
+			<Thumbnail postUid={highlightedMedia.uid} className="object-cover aspect-[21/9] w-full" />
 			<div class="hero-overlay bg-opacity-60" />
 			<div class="hero-content text-neutral-content">
 				<div>

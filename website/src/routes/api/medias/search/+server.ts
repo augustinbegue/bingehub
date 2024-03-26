@@ -28,11 +28,12 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			title: true,
 			createdAt: true,
 			updatedAt: true,
-			media: {
+			artworks: {
 				select: {
-					thumbnailDataUrl: true
+					uid: true,
+					type: true
 				}
-			}
+			},
 		},
 		orderBy: [
 			{

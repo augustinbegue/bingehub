@@ -1,6 +1,6 @@
 import { prisma } from '$lib/server/database/prisma';
 import { Worker } from 'worker_threads';
-import { log } from '..';
+import { log } from '../logger';
 import { Job, MediaType } from '@prisma/client';
 
 export interface cmsJob {
@@ -49,7 +49,6 @@ export async function checkForNewJobs() {
 							uid: true,
 							url: true,
 							type: true,
-							thumbnailDataUrl: true,
 							originalUrl: true
 						}
 					}
@@ -167,11 +166,6 @@ async function onJobComplete(job: cmsJob, message: any) {
 					uid: job.data.media.uid
 				},
 				{
-					thumbnailDataUrl: {
-						not: null
-					}
-				},
-				{
 					url: {
 						endsWith: '.mpd'
 					}
@@ -189,11 +183,6 @@ async function onJobComplete(job: cmsJob, message: any) {
 				AND: [
 					{
 						uid: job.data.media.uid
-					},
-					{
-						thumbnailDataUrl: {
-							not: null
-						}
 					},
 					{
 						url: {

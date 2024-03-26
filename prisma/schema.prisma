@@ -114,6 +114,7 @@ model Post {
   isDeleted         Boolean     @default(false)
   deletedAt         DateTime?
   title             String
+  slug              String      @unique
   content           String
   author            User        @relation(name: "PostAuthor", fields: [authorId], references: [uid])
   authorId          String
@@ -123,6 +124,7 @@ model Post {
   linkedPostsParent Post[]      @relation(name: "PostLinked")
   linkedPostsChild  Post[]      @relation(name: "PostLinked")
   requests          Request[]   @relation(name: "RequestPost")
+  artworks          Artwork[]   @relation(name: "ArtworkPost")
 }
 
 enum MediaType {
@@ -132,19 +134,40 @@ enum MediaType {
 }
 
 model Media {
-  uid              String    @id @default(uuid())
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  isActive         Boolean   @default(true)
-  isDeleted        Boolean   @default(false)
-  deletedAt        DateTime?
-  type             MediaType
-  url              String
-  originalUrl      String    @default("")
-  thumbnailDataUrl String?
-  post             Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
-  postId           String    @unique
-  jobs             Job[]     @relation(name: "JobMedia")
+  uid         String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  type        MediaType
+  url         String
+  originalUrl String    @default("")
+  post        Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
+  postId      String    @unique
+  jobs        Job[]     @relation(name: "JobMedia")
+}
+
+enum ArtworkType {
+  THUMBNAIL
+  POSTER
+  BANNER
+  BACKGROUND
+}
+
+model Artwork {
+  uid       String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  isActive  Boolean     @default(true)
+  isDeleted Boolean     @default(false)
+  deletedAt DateTime?
+  dataUrl   String
+  width     Int
+  height    Int
+  type      ArtworkType
+  post      Post        @relation(name: "ArtworkPost", fields: [postId], references: [uid])
+  postId    String
 }
 
 enum JobType {
