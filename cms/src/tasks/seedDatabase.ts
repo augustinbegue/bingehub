@@ -44,5 +44,3 @@ export async function seedDatabase() {
 		console.error('Failed to seed database');
 	}
 }
-
-seedDatabase();

@@ -25,5 +25,5 @@
 		<img src="/images/placeholder.jpg" class={className} alt="Thumbnail" />
 	{/if}
 {:catch error}
-	<img src="/images/placeholder.jpg" alt="Thumbnail" />
+	<img src="/images/placeholder.jpg" class={className} alt="Thumbnail" />
 {/await}

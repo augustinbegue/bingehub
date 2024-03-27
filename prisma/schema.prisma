@@ -103,28 +103,30 @@ enum PostType {
 enum PostSubType {
   MOVIE
   SERIES
-  LIVE
+  SEASON
+  EPISODE
 }
 
 model Post {
-  uid               String      @id @default(uuid())
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  isActive          Boolean     @default(true)
-  isDeleted         Boolean     @default(false)
-  deletedAt         DateTime?
-  title             String
-  slug              String      @unique
-  content           String
-  author            User        @relation(name: "PostAuthor", fields: [authorId], references: [uid])
-  authorId          String
-  type              PostType
-  subType           PostSubType
-  media             Media?      @relation(name: "PostMedia")
-  linkedPostsParent Post[]      @relation(name: "PostLinked")
-  linkedPostsChild  Post[]      @relation(name: "PostLinked")
-  requests          Request[]   @relation(name: "RequestPost")
-  artworks          Artwork[]   @relation(name: "ArtworkPost")
+  uid       String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  isActive  Boolean     @default(true)
+  isDeleted Boolean     @default(false)
+  deletedAt DateTime?
+  title     String
+  slug      String      @unique
+  content   String
+  author    User        @relation(name: "PostAuthor", fields: [authorId], references: [uid])
+  authorId  String
+  type      PostType
+  subType   PostSubType
+  media     Media?      @relation(name: "PostMedia")
+  parent    Post?       @relation(name: "PostLinked", fields: [parentUid], references: [uid])
+  childs    Post[]      @relation(name: "PostLinked")
+  requests  Request[]   @relation(name: "RequestPost")
+  artworks  Artwork[]   @relation(name: "ArtworkPost")
+  parentUid String?
 }
 
 enum MediaType {

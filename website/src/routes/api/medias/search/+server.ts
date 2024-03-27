@@ -15,6 +15,11 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			AND: [
 				{ type: 'MEDIA' },
 				{
+					subType: {
+						in: ['MOVIE', 'SERIES']
+					}
+				},
+				{
 					title: {
 						mode: 'insensitive',
 						contains: query
@@ -26,14 +31,10 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		select: {
 			uid: true,
 			title: true,
+			slug: true,
 			createdAt: true,
 			updatedAt: true,
-			artworks: {
-				select: {
-					uid: true,
-					type: true
-				}
-			},
+			subType: true,
 		},
 		orderBy: [
 			{

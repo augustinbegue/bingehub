@@ -35,13 +35,23 @@ export interface TVDBArtwork {
 }
 
 export interface TVDBSeries {
-    id: string;
+    id: number;
     name: string;
     slug: string;
     image: string;
     firstAired: string;
     overview: string;
     artworks: TVDBArtwork[];
+}
+
+export interface TVDBEpisode {
+    id: number;
+    seriesId: string;
+    name: string;
+    overview: string;
+    number: number;
+    seasonNumber: number;
+    image: string;
 }
 
 export interface TVDBMovie {
@@ -126,8 +136,27 @@ export class TVDB {
         return data;
     }
 
-    async getSeries(id: string): Promise<TVDBSeries | null> {
+    async getSeries(id: number): Promise<TVDBSeries | null> {
         const res = await fetch(`${TVDB_URL}/series/${id}/extended`, {
+            headers: {
+                ...this.getHeaders()
+            }
+        });
+
+        const resData = await res.json();
+
+        if (resData.status === 'failure') {
+            return null;
+        }
+
+        return resData.data;
+    }
+
+    async getSeriesEpisodes(seriesId: number, order = "official"): Promise<{
+        series: TVDBSeries;
+        episodes: TVDBEpisode[];
+    } | null> {
+        const res = await fetch(`${TVDB_URL}/series/${seriesId}/episodes/${order}`, {
             headers: {
                 ...this.getHeaders()
             }

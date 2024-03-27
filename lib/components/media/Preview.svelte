@@ -1,21 +1,26 @@
 <script lang="ts">
 	import type { Post, Media } from '@prisma/client';
 	import Poster from './Poster.svelte';
+	import Thumbnail from './Thumbnail.svelte';
 
 	export let post: Post;
 </script>
 
-<a class="rounded-xl w-32 lg:w-64" href="/watch/{post.uid}">
-	<Poster postUid={post.uid} className="rounded-xl" />
-
-	<div class="p-2">
-		<h2 class="text-lg font-bold">{post.title}</h2>
-	</div>
-
-	<!-- <figure>
-		<Poster postUid={post.uid} />
-	</figure>
-	<div class="card-body justify-end">
-		<h2 class="card-title">{post.title}</h2>
-	</div> -->
-</a>
+{#if post.subType === 'MOVIE'}
+	<a class="rounded-xl w-32 lg:w-64" href="/watch/{post.uid}">
+		<Poster postUid={post.uid} className="rounded-xl" />
+	</a>
+{:else if post.subType === 'SERIES'}
+	<a class="rounded-xl w-32 lg:w-64" href="/series/{post.slug}">
+		<Poster postUid={post.uid} className="rounded-xl" />
+	</a>
+{:else}
+	<a class="rounded-xl h-16 lg:h-32 flex flex-row gap-2" href="/watch/{post.uid}">
+		<Thumbnail postUid={post.uid} className="rounded-xl h-full" />
+		<div class="flex flex-col">
+			<p class="font-bold text-xl">{post.title}</p>
+			<p class="opacity-60 text-sm">{post.slug.split('-').pop().toUpperCase()}</p>
+			<p>{post.content}</p>
+		</div>
+	</a>
+{/if}

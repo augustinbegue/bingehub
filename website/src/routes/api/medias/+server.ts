@@ -27,7 +27,10 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		where: {
 			isActive: true,
 			isDeleted: false,
-			type: 'MEDIA'
+			type: 'MEDIA',
+			subType: {
+				in: ['MOVIE', 'SERIES']
+			}
 		},
 		take: pageLength == -1 ? undefined : pageLength,
 		skip: pageLength == -1 ? undefined : (pagination.current - 1) * pageLength,

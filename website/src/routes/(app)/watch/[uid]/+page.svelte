@@ -7,30 +7,54 @@
 
 	export let data: PageData;
 
-	let source = [`/api/medias/${data.media.uid}/stream`];
+	let source = [`/api/medias/${data.post.uid}/stream`];
 
-	const background =
-		data.media.artworks.find((artwork) => artwork.type === 'BACKGROUND')?.dataUrl || '';
+	$: background = data.post.artworks[0].dataUrl || '/images/placeholder.jpg';
 </script>
 
-<div class="flex max-h-[75vh] bg-black">
-	{#if source.length > 0 && data.media.media && data.media.media.url.endsWith('.mpd')}
-		<Player {source} poster={background} />
-	{:else}
-		<video autoplay controls class="grow w-auto" poster={background}>
-			<source src={`/api/medias/${data.media.uid}/static`} type="video/mp4" />
-		</video>
-	{/if}
-</div>
-<div class="container mx-auto p-8">
-	<div class="mt-4">
-		<h1 class="text-3xl font-bold">{data.media.title}</h1>
-		<p class="text-gray-100">{data.media.content}</p>
-		<p class="text-gray-500 mt-2">
+{#key data.post.uid}
+	<div class="flex max-h-[75vh] bg-black">
+		{#if source.length > 0 && data.post.media && data.post.media.url.endsWith('.mpd')}
+			<Player {source} poster={background} />
+		{:else}
+			<video controls class="grow w-auto" poster={background}>
+				<source src={`/api/medias/${data.post.uid}/static`} type="video/mp4" />
+			</video>
+		{/if}
+	</div>
+{/key}
+
+<div class="container mx-auto pt-4 pb-16">
+	<div>
+		<h1 class="text-3xl font-bold">{data.post.title}</h1>
+		{#if data.post.parent}
+			<p class="text-gray-500 mb-2">
+				<a href={`/series/${data.post.parent.slug}`}
+					>{data.post.parent.title} - {data.post.slug.split('-').pop()?.toUpperCase()}</a
+				>
+			</p>
+		{/if}
+		<p class="text-gray-100">{data.post.content}</p>
+		<div class="flex flex-row mt-2">
+			{#if data.previousPost}
+				<a href={`/watch/${data.previousPost.uid}`} class="btn btn-sm btn-ghost mr-2 gap-2">
+					<i class="fa-solid fa-arrow-left" /> Previous
+				</a>
+			{/if}
+			{#if data.nextPost}
+				<a href={`/watch/${data.nextPost.uid}`} class="btn btn-sm btn-ghost gap-2">
+					Next <i class="fa-solid fa-arrow-right" />
+				</a>
+			{/if}
+		</div>
+	</div>
+
+	<div class="mt-8">
+		<div class="flex flex-row gap-4">
 			<button
 				class="btn btn-sm btn-primary gap-2"
 				on:click={() => {
-					navigator.clipboard.writeText(`${$page.url.origin}/api/medias/${data.media.uid}/static`);
+					navigator.clipboard.writeText(`${$page.url.origin}/api/medias/${data.post.uid}/static`);
 				}}
 			>
 				<i class="fa-solid fa-copy" /> Copy stream link
@@ -43,7 +67,7 @@
 					on:click={() => {
 						window.open(
 							`vlc-x-callback://x-callback-url/stream?url=${encodeURIComponent(
-								`${$page.url.origin}/api/medias/${data.media.uid}/static`
+								`${$page.url.origin}/api/medias/${data.post.uid}/static`
 							)}`
 						);
 					}}
@@ -56,15 +80,16 @@
 				<button
 					class="btn btn-sm btn-primary gap-2"
 					on:click={() => {
-						window.open(`vlc://${$page.url.origin}/api/medias/${data.media.uid}/static`);
+						window.open(`vlc://${$page.url.origin}/api/medias/${data.post.uid}/static`);
 					}}
 				>
 					<i class="fa-solid fa-external-link" /> Open in VLC
 				</button>
 			{/if}
-			<br />
-			The stream link can be opened in VLC or any other media player. Use this if the video player above
-			doesn't work.
+		</div>
+		<p class="text-gray-500">
+			The stream link can be opened in VLC or any other media player. Use this if the video player
+			above doesn't work.
 		</p>
 	</div>
 </div>
