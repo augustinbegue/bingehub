@@ -341,7 +341,7 @@ export async function importNewMedia() {
                         data: {
                             title: e.name,
                             slug: `${r.slug}-s${seasonStr}e${episodeStr}`,
-                            content: e.name,
+                            content: e.overview || e.name,
                             type: PostType.MEDIA,
                             subType: PostSubType.EPISODE,
                             author: {

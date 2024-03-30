@@ -67,8 +67,13 @@
 	{/if}
 </div>
 <div class="md:hidden">
-	<a class="hero aspect-[21/9]" href="/watch/{highlightedMedia?.uid}">
-		{#if highlightedMedia}
+	{#if highlightedMedia}
+		<a
+			class="hero aspect-[21/9]"
+			href={highlightedMedia.subType === 'MOVIE'
+				? `/watch/${highlightedMedia.uid}`
+				: `/series/${highlightedMedia.slug}`}
+		>
 			<Thumbnail postUid={highlightedMedia.uid} className="object-cover aspect-[21/9] w-full" />
 			<div class="hero-overlay bg-opacity-60" />
 			<div class="hero-content text-neutral-content">
@@ -76,8 +81,10 @@
 					<h2 class="text-2xl font-bold">{highlightedMedia?.title}</h2>
 				</div>
 			</div>
-		{/if}
-	</a>
+		</a>
+	{:else}
+		<Spinner />
+	{/if}
 </div>
 
 <div class="container mx-auto p-4">

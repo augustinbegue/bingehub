@@ -24,8 +24,8 @@
 	</div>
 {/key}
 
-<div class="container mx-auto pt-4 pb-16">
-	<div>
+<div class="container mx-auto pt-4 pb-16 px-4">
+	<div class="">
 		<h1 class="text-3xl font-bold">{data.post.title}</h1>
 		{#if data.post.parent}
 			<p class="text-gray-500 mb-2">
@@ -35,7 +35,7 @@
 			</p>
 		{/if}
 		<p class="text-gray-100">{data.post.content}</p>
-		<div class="flex flex-row mt-2">
+		<div class="flex flex-row mt-4">
 			{#if data.previousPost}
 				<a href={`/watch/${data.previousPost.uid}`} class="btn btn-sm btn-ghost mr-2 gap-2">
 					<i class="fa-solid fa-arrow-left" /> Previous
@@ -49,8 +49,8 @@
 		</div>
 	</div>
 
-	<div class="mt-8">
-		<div class="flex flex-row gap-4">
+	<div class="mt-4">
+		<div class="flex flex-row gap-4 mb-4">
 			<button
 				class="btn btn-sm btn-primary gap-2"
 				on:click={() => {

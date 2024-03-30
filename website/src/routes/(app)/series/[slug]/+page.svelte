@@ -47,9 +47,19 @@
 	</div>
 </div>
 
-<div class="container mx-auto py-8">
+<div class="md:hidden hero aspect-[21/9]">
+	<Thumbnail postUid={data.series.uid} className="object-cover aspect-[21/9] w-full" />
+	<div class="hero-overlay bg-opacity-60" />
+	<div class="hero-content text-neutral-content">
+		<div>
+			<h2 class="text-2xl font-bold">{data.series.title}</h2>
+		</div>
+	</div>
+</div>
+
+<div class="container mx-auto py-8 px-4">
 	<select
-		class="select mb-4"
+		class="select select-bordered mb-4"
 		on:change={(e) => {
 			episodes = seasons[parseInt(e.target.value)].episodes;
 		}}

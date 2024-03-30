@@ -20,7 +20,7 @@
 		<div class="flex flex-col">
 			<p class="font-bold text-xl">{post.title}</p>
 			<p class="opacity-60 text-sm">{post.slug.split('-').pop().toUpperCase()}</p>
-			<p>{post.content}</p>
+			<p class="hidden md:block">{post.content}</p>
 		</div>
 	</a>
 {/if}
