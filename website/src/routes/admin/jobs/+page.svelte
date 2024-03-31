@@ -83,14 +83,16 @@
 								<kbd class="text-error">
 									{job.error?.slice(0, 50)}
 								</kbd>
-							{:else}
+							{:else if job.status !== 'QUEUED'}
 								<progress
-									class="progress w-56"
+									class="progress w-56 mr-2"
 									class:progress-primary={job.progress < 100}
 									class:progress-success={job.progress === 100}
 									value={job.progress}
 									max="100"
 								/>
+
+								({job.progress}%)
 							{/if}
 						</td>
 						<td>{job.createdAt.toLocaleString()}</td>

@@ -38,6 +38,13 @@ export const load: PageServerLoad = async ({ locals, params, url }) => {
 					uid: true,
 					type: true
 				}
+			},
+			parent: {
+				select: {
+					uid: true,
+					type: true,
+					title: true
+				}
 			}
 		}
 	});

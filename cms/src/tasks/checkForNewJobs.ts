@@ -71,10 +71,10 @@ async function runJob(job: cmsJob) {
 
 	switch (job.data.type) {
 		case 'THUMBNAIL':
-			jobPath = __dirname + '/jobs/thumbnail.js';
+			jobPath = __dirname + '/../jobs/thumbnail.js';
 			break;
 		case 'TRANSCODE':
-			jobPath = __dirname + '/jobs/transcode.js';
+			jobPath = __dirname + '/../jobs/transcode.js';
 			break;
 		default:
 			log.error(`Unknown job type ${job.data.type}`);

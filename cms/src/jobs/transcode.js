@@ -41,6 +41,8 @@ const { exec } = require('node:child_process');
 
     const hdr = videoStream.pix_fmt === 'yuv420p10le';
 
+    console.log(`Video stream: ${videoStream.width}x${videoStream.height} ${videoStream.codec_name} ${videoStream.pix_fmt}`);
+
     const profiles = [];
     if (!hdr) {
         if (videoStream.height >= 480) profiles.push(FFMPEG_480P_PROFILE);
@@ -139,6 +141,7 @@ function endCallback(job, outDir, filename, profiles) {
 
     packagerCmd.push('--generate_dash_if_iop_compliant_mpd=false');
     packagerCmd.push(`--mpd_output "${join(outDir, 'manifest.mpd')}"`);
+    packagerCmd.push('--hls_master_playlist_output', join(outDir, 'master.m3u8'));
 
     console.log('Packager command:', packagerCmd.join(' '));
 
@@ -158,10 +161,11 @@ function endCallback(job, outDir, filename, profiles) {
 
     cmd.on('exit', (code) => {
         if (code !== 0) {
-            parentPort.postMessage({
-                status: 'FAILED',
-                error: `Packager exited with code ${code}`
-            });
+            console.log(`Packager process exited with code ${code}`);
+            console.log(`Retrying without subtitles`);
+            profiles = profiles.filter((profile) => !profile.resolution.startsWith('subtitle'));
+            endCallback(job, outDir, filename, profiles);
+
             return;
         }
 

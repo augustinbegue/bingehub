@@ -7,7 +7,7 @@
 
 	export let data: PageData;
 
-	let source = [`/api/medias/${data.post.uid}/stream`];
+	let source = [`/api/medias/${data.post.uid}/dash`, `/api/medias/${data.post.uid}/hls`];
 
 	$: background = data.post.artworks[0].dataUrl || '/images/placeholder.jpg';
 </script>

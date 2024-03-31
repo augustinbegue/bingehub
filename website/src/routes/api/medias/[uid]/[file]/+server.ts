@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import { error } from '@sveltejs/kit';
 import parseRange from 'range-parser';
 import { prisma } from '$lib/server/database/prisma';
-import { dev } from '$app/environment';
 
 export const GET: RequestHandler = async ({ request, params }) => {
 	const rangeHeader = request.headers.get('content-range') || request.headers.get('range') || null;
@@ -37,20 +36,25 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
 	videoPath = videoPath.replace(/\\/g, '/');
 
-	if (dev && !videoPath.startsWith('Z')) {
-		videoPath = videoPath.replace('/torrent', 'Z:\\torrent');
-	}
-
 	try {
 		const stats = await fs.promises.stat(videoPath);
 
 		if (!rangeHeader) {
 			// No range header, just return the whole file
 			const readStream = fs.createReadStream(videoPath);
+
+			let contentType = 'video/webm';
+			if (file.endsWith('.mpd')) {
+				contentType = 'application/dash+xml';
+			} else if (file.endsWith('.m3u8')) {
+				contentType = 'application/vnd.apple.mpegurl';
+			}
+
 			const res = new Response(readStream, {
 				status: 200,
 				headers: {
-					'Content-Type': 'video/mp4'
+					'Content-Type': contentType,
+					'Content-Length': stats.size.toString()
 				}
 			});
 
@@ -84,7 +88,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 				'Accept-Ranges': 'bytes',
 				'Content-Length': contentLength.toString(),
 				'Content-Range': `bytes ${byteStart}-${byteEnd}/${videoSize}`,
-				'Content-Type': 'video/mp4'
+				'Content-Type': 'video/webm'
 			}
 		});
 	} catch (err) {

@@ -76,11 +76,15 @@
 	});
 </script>
 
-<div bind:this={videoContainer}>
+<div bind:this={videoContainer} class="w-full">
 	<!-- svelte-ignore a11y-media-has-caption -->
 	<video class="grow w-auto" bind:this={video} {poster} />
 </div>
 
 <style>
 	@import 'shaka-player/dist/controls.css';
+
+	.shaka-overflow-menu {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
 </style>

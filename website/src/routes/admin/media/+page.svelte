@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import ImagePickerDragAndDrop from '$lib/components/inputs/ImagePickerDragAndDrop.svelte';
 	import Modal from '$lib/components/modals/Modal.svelte';
 	import Pagination from '$lib/components/pagination/pagination.svelte';
 	import { alerts } from '$lib/modules/interaction/alerter';
@@ -17,7 +16,7 @@
 	const PostSubType = {
 		MOVIE: 'MOVIE',
 		SERIES: 'SERIES',
-		LIVE: 'LIVE'
+		EPISODE: 'EPISODE'
 	};
 	const JobType = {
 		TRANSCODE: 'TRANSCODE',
@@ -222,7 +221,7 @@
 
 <div class="flex flex-col">
 	<div class="flex flex-row justify-between items-baseline">
-		<Pagination pagination={data.pagination} url={$page.url.href} />
+		<Pagination pagination={data.pagination} url={$page.url} />
 
 		<p class="text-sm opacity-50 p-4">Selected: {checkedData.length}</p>
 
@@ -252,6 +251,7 @@
 						/>
 					</th>
 					<th>Title</th>
+					<th>Type</th>
 					<th>Transcoded</th>
 					<th>Created @</th>
 					<th>Updated @</th>
@@ -269,7 +269,13 @@
 								bind:checked={post.checked}
 							/>
 						</td>
-						<td>{post.title}</td>
+						<td>
+							{#if post.parent} {post.parent.title} - {/if}
+							{post.title}
+						</td>
+						<td>
+							{post.subType}
+						</td>
 						<td>
 							{#if post.media?.url.endsWith('.mpd')}
 								<span class="badge badge-success">Yes</span>
@@ -284,6 +290,16 @@
 						</td>
 						<td>
 							<div class="btn-group">
+								{#if post.subType === 'EPISODE' || post.subType === 'MOVIE'}
+									<a
+										class="btn btn-outline btn-sm btn-ghost gap-2"
+										href="/watch/{post.uid}"
+										target="_blank"
+									>
+										<i class="fa-solid fa-arrow-up-right-from-square" />
+										View
+									</a>
+								{/if}
 								<button
 									class="btn btn-outline btn-sm btn-primary"
 									on:click={() => {
