@@ -34,6 +34,7 @@ model User {
   requests     Request[]     @relation(name: "RequestAuthor")
   subscription Subscription? @relation(name: "SubscriptionUser")
   Event        Event[]       @relation(name: "EventUser")
+  viewed       View[]        @relation(name: "ViewUser")
 }
 
 enum EventType {
@@ -59,7 +60,6 @@ model Event {
   userId    String
 }
 
-// Represents a user's subscription. Lasts for 1 month.
 model Subscription {
   uid       String    @id @default(uuid())
   createdAt DateTime  @default(now())
@@ -145,9 +145,26 @@ model Media {
   type        MediaType
   url         String
   originalUrl String    @default("")
+  size        BigInt    @default(0)
   post        Post      @relation(name: "PostMedia", fields: [postId], references: [uid])
   postId      String    @unique
   jobs        Job[]     @relation(name: "JobMedia")
+  views       View[]    @relation(name: "ViewMedia")
+}
+
+model View {
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isActive   Boolean   @default(true)
+  isDeleted  Boolean   @default(false)
+  deletedAt  DateTime?
+  user       User      @relation(name: "ViewUser", fields: [userId], references: [uid])
+  userId     String
+  media      Media     @relation(name: "ViewMedia", fields: [mediaId], references: [uid])
+  mediaId    String
+  viewedSize BigInt
+
+  @@id([userId, mediaId])
 }
 
 enum ArtworkType {

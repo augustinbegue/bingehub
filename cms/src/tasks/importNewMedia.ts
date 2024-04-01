@@ -8,8 +8,9 @@ import { MediaType, PostSubType, PostType } from "@prisma/client";
 
 export async function importNewMedia() {
     const standalone = !!process.env.STANDALONE;
+    const dev = !!process.env.TS_NODE_DEV;
 
-    const libraryPath = standalone ? "Z:/torrent/downloads/complete" : "/library";
+    const libraryPath = standalone || dev ? "Z:/torrent/downloads/complete" : "/library";
     const excludedKeywords = ["f1"];
     const extensions = ["mp4", "mkv"];
 
@@ -22,10 +23,12 @@ export async function importNewMedia() {
             path: string;
             season: number;
             episode: number;
+            size: number;
         }[] | {
             title: string;
             path: string;
             year: number;
+            size: number;
         };
     } = {};
 
@@ -58,13 +61,15 @@ export async function importNewMedia() {
                             path: string;
                             season: number;
                             episode: number;
+                            size: number;
                         }[]>res[title.toLowerCase()];
 
                         arr.push({
                             title,
                             path,
                             season,
-                            episode
+                            episode,
+                            size: stat.size
                         });
                     } else {
                         console.error("Conflict between a movie and a series", { title, path, season, episode });
@@ -89,7 +94,8 @@ export async function importNewMedia() {
                 res[title.toLowerCase()] = {
                     title,
                     path,
-                    year
+                    year,
+                    size: stat.size
                 };
             }
         }
@@ -103,6 +109,7 @@ export async function importNewMedia() {
         path: string;
         poster?: TVDBArtwork;
         backdrop?: TVDBArtwork;
+        size: number;
         type: "movie";
     } | {
         title: string;
@@ -118,6 +125,7 @@ export async function importNewMedia() {
             overview: string;
             image: string;
             path: string;
+            size: number;
         }[]
     })[] = [];
 
@@ -164,7 +172,8 @@ export async function importNewMedia() {
                         episode,
                         image: "",
                         path: e.path,
-                        overview: ""
+                        overview: "",
+                        size: e.size
                     }
                 }
 
@@ -174,7 +183,8 @@ export async function importNewMedia() {
                     episode,
                     image: tvdbEpisode.image,
                     path: e.path,
-                    overview: tvdbEpisode.overview || tvdbEpisode.name
+                    overview: tvdbEpisode.overview || tvdbEpisode.name,
+                    size: e.size
                 };
             });
 
@@ -202,7 +212,8 @@ export async function importNewMedia() {
                 path: data.path,
                 poster,
                 backdrop,
-                type: "movie"
+                type: "movie",
+                size: data.size
             });
         }
     }
@@ -316,10 +327,23 @@ export async function importNewMedia() {
                         type: MediaType.VIDEO_HARDLINKED,
                         url: r.path,
                         originalUrl: r.path,
-                        postId: prismaPost.uid
+                        postId: prismaPost.uid,
+                        size: r.size
                     }
                 });
                 log.info(`\tAdded media: ${r.path}`);
+            } else {
+                await prisma.media.update({
+                    where: {
+                        uid: prismaPost.media.uid
+                    },
+                    data: {
+                        url: r.path,
+                        originalUrl: r.path,
+                        size: r.size
+                    }
+                });
+                log.info(`\tUpdated media: ${r.path}`);
             }
         } else {
             // Import Series Episodes
@@ -389,10 +413,23 @@ export async function importNewMedia() {
                             type: MediaType.VIDEO_HARDLINKED,
                             url: e.path,
                             originalUrl: e.path,
-                            postId: prismaEpisode.uid
+                            postId: prismaEpisode.uid,
+                            size: e.size
                         }
                     });
                     log.info(`\t\tAdded media: ${e.path}`);
+                } else {
+                    await prisma.media.update({
+                        where: {
+                            uid: prismaEpisode.media.uid
+                        },
+                        data: {
+                            url: e.path,
+                            originalUrl: e.path,
+                            size: e.size
+                        }
+                    });
+                    log.info(`\t\tUpdated media: ${e.path}`);
                 }
 
                 if (!prismaEpisode.artworks.length && e.image.length > 0) {
@@ -411,5 +448,3 @@ export async function importNewMedia() {
         }
     }
 }
-
-importNewMedia();
