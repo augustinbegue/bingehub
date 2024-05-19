@@ -443,7 +443,7 @@ export async function importNewMedia() {
                     log.info(`\t\tUpdated media: ${e.path}`);
                 }
 
-                if (!prismaEpisode.artworks.length && e.image.length > 0) {
+                if (!prismaEpisode.artworks.length && e.image?.length > 0) {
                     await prisma.artwork.create({
                         data: {
                             dataUrl: await fetchImageDataUrl(e.image),
