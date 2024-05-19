@@ -1,18 +1,18 @@
 version: '3.9'
 services:
-  website:
-    build:
-      dockerfile: dockerfile-website
-      tags:
-        - 'docker.hostag.fr/bingehub-website:${npm_package_version}'
-    ports:
-      - '3000:3000'
-    image: 'docker.hostag.fr/bingehub-website:${npm_package_version}'
-    env_file:
-      - .env
-    volumes:
-      - Z:\torrent:/library
-    user: '0:0'
+  # website:
+  #   build:
+  #     dockerfile: dockerfile-website
+  #     tags:
+  #       - 'docker.hostag.fr/bingehub-website:${npm_package_version}'
+  #   ports:
+  #     - '3000:3000'
+  #   image: 'docker.hostag.fr/bingehub-website:${npm_package_version}'
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - Z:\torrent:/library
+  #   user: '0:0'
   cms:
     build:
       dockerfile: dockerfile-cms
@@ -22,5 +22,5 @@ services:
     env_file:
       - .env
     volumes:
-      - Z:\torrent:/library
+      - /mnt/silverstone/torrent:/library
     user: '0:0'

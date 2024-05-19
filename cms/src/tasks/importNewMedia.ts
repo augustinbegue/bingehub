@@ -95,17 +95,19 @@ export async function importNewMedia() {
                 matches = filename.match(/(.*)(\d{4})/i);
             }
 
-            // eslint-disable-next-line no-useless-escape
-            const title = matches[1].replace(/[\.\(]/g, " ").trim();
-            const year = parseInt(matches[2]);
+            if (matches) {
+                // eslint-disable-next-line no-useless-escape
+                const title = matches[1].replace(/[\.\(]/g, " ").trim();
+                const year = parseInt(matches[2]);
 
-            if (!isNaN(year)) {
-                res[title.toLowerCase()] = {
-                    title,
-                    path,
-                    year,
-                    size: stat.size
-                };
+                if (!isNaN(year)) {
+                    res[title.toLowerCase()] = {
+                        title,
+                        path,
+                        year,
+                        size: stat.size
+                    };
+                }
             }
         }
     }

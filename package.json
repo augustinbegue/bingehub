@@ -1,6 +1,6 @@
 {
     "name": "bingehub",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "scripts": {
         "prisma:generate": "prisma generate",
         "build": "npm run prisma:generate && concurrently npm:build:*",
