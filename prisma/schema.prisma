@@ -162,7 +162,7 @@ model View {
   userId     String
   media      Media     @relation(name: "ViewMedia", fields: [mediaId], references: [uid])
   mediaId    String
-  viewedSize BigInt
+  percentage Int
 
   @@id([userId, mediaId])
 }

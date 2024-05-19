@@ -1,6 +1,6 @@
 {
     "name": "bingehub",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "scripts": {
         "prisma:generate": "prisma generate",
         "build": "npm run prisma:generate && concurrently npm:build:*",
@@ -13,7 +13,7 @@
         "dev:cms": "npm run dev --workspace=cms",
         "dev:website": "npm run dev --workspace=website",
         "docker:build": "docker compose build",
-        "docker:publish": "docker compose push",
+        "docker:push": "docker compose push",
         "docker:up": "docker compose up -d"
     },
     "workspaces": [

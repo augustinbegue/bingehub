@@ -1,0 +1,22 @@
+[
+	{
+		"name": "Seed Database",
+		"run": "seedDatabase",
+		"interval": 0
+	},
+	{
+		"name": "Check for new jobs",
+		"run": "checkForNewJobs",
+		"interval": 30000
+	},
+	{
+		"name": "Refresh Subscriptions",
+		"run": "refreshSubscriptions",
+		"interval": 86400000
+	},
+	{
+		"name": "Import new media",
+		"run": "importNewMedia",
+		"interval": 3600000
+	}
+]

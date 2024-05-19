@@ -4,31 +4,48 @@ import { error } from '@sveltejs/kit';
 import parseRange from 'range-parser';
 import { prisma } from '$lib/server/database/prisma';
 
-export const GET: RequestHandler = async ({ request, params }) => {
+export const GET: RequestHandler = async ({ request, params, locals }) => {
 	const rangeHeader = request.headers.get('content-range') || request.headers.get('range') || null;
 	const file = params.file;
 
 	const { uid } = params;
-	const media = await prisma.post.findUnique({
+	const post = await prisma.post.findUnique({
 		where: {
 			uid
 		},
 		include: {
 			media: {
 				select: {
+					uid: true,
 					url: true,
-					originalUrl: true
+					originalUrl: true,
+					views: {
+						where: {
+							userId: locals.user?.uid
+						}
+					}
 				}
 			}
 		}
 	});
 
-	if (!media) {
+	if (!post || !post.media) {
 		throw error(404, 'Media not found');
 	}
+
+	if (post.media.views.length === 0 && locals.user?.uid) {
+		await prisma.view.create({
+			data: {
+				percentage: 0,
+				userId: locals.user.uid,
+				mediaId: post.media.uid
+			}
+		});
+	}
+
 	const DASH = file !== 'static';
 
-	let videoPath = DASH ? media.media?.url?.replace('manifest.mpd', file) : media.media?.originalUrl;
+	let videoPath = DASH ? post.media?.url?.replace('manifest.mpd', file) : post.media?.originalUrl;
 
 	if (!videoPath) {
 		throw error(404, 'Media not found');
@@ -41,7 +58,7 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
 		if (!rangeHeader) {
 			// No range header, just return the whole file
-			const readStream = fs.createReadStream(videoPath);
+			const fileStream = fs.createReadStream(videoPath);
 
 			let contentType = 'video/webm';
 			if (file.endsWith('.mpd')) {
@@ -50,7 +67,21 @@ export const GET: RequestHandler = async ({ request, params }) => {
 				contentType = 'application/vnd.apple.mpegurl';
 			}
 
-			const res = new Response(readStream, {
+			if (locals.user?.uid) {
+				await prisma.view.update({
+					where: {
+						userId_mediaId: {
+							userId: locals.user?.uid,
+							mediaId: post.media.uid
+						}
+					},
+					data: {
+						percentage: 100
+					}
+				});
+			}
+
+			const res = new Response(fileStream, {
 				status: 200,
 				headers: {
 					'Content-Type': contentType,
@@ -79,6 +110,20 @@ export const GET: RequestHandler = async ({ request, params }) => {
 		}
 
 		const contentLength = byteEnd - byteStart + 1;
+
+		if (locals.user?.uid) {
+			await prisma.view.update({
+				where: {
+					userId_mediaId: {
+						userId: locals.user?.uid,
+						mediaId: post.media.uid
+					}
+				},
+				data: {
+					percentage: Math.round((byteStart / videoSize) * 100)
+				}
+			});
+		}
 
 		const stream = fs.createReadStream(videoPath, { start: byteStart, end: byteEnd });
 

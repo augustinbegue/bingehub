@@ -2,7 +2,7 @@ import { prisma } from "$lib/server/database/prisma";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
     const parentPost = await prisma.post.findFirst({
         where: {
             slug: params.slug,
@@ -11,6 +11,17 @@ export const load: PageServerLoad = async ({ params }) => {
             childs: {
                 orderBy: {
                     slug: "asc",
+                },
+                include: {
+                    media: {
+                        include: {
+                            views: {
+                                where: {
+                                    userId: locals.user?.uid,
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

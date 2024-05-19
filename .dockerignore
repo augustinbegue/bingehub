@@ -1,4 +1,10 @@
 node_modules
+website/node_modules
+cms/node_modules
 bin
 .env*
 .svelte-kit
+*.mkv
+*.webm
+*.vtt
+*.mp4

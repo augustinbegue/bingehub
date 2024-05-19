@@ -6,7 +6,9 @@
 		},
 		"outDir": "./build",
 		"allowJs": true,
-		"rootDirs": ["./src", "../../lib"]
+		"rootDirs": ["./src", "../../lib"],
+		"resolveJsonModule": true,
+		"esModuleInterop": true
 	},
 	"include": ["../../lib/**/*.ts", "./**/*.ts", "./**/*.js"],
 	"exclude": ["node_modules", "../../lib/server/firebase", "../../lib/modules", "build"]

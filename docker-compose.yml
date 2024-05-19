@@ -11,7 +11,7 @@ services:
     env_file:
       - .env
     volumes:
-      - 'Z:\torrent\downloads\complete:/library'
+      - Z:\torrent:/library
     user: '0:0'
   cms:
     build:
@@ -22,4 +22,5 @@ services:
     env_file:
       - .env
     volumes:
-      - 'Z:\torrent\downloads\complete:/library'
+      - Z:\torrent:/library
+    user: '0:0'

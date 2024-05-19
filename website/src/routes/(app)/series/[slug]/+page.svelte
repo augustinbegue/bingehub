@@ -71,7 +71,7 @@
 
 	<div class="flex flex-col gap-4">
 		{#each episodes as episode}
-			<Preview post={episode} />
+			<Preview post={episode} view={episode.media.views[0] ?? null} />
 		{/each}
 	</div>
 </div>

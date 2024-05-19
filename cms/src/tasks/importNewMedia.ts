@@ -7,14 +7,23 @@ import { fetchImageDataUrl } from "../../../lib/utils/fetchImageDataUrl";
 import { MediaType, PostSubType, PostType } from "@prisma/client";
 
 export async function importNewMedia() {
-    const standalone = !!process.env.STANDALONE;
-    const dev = !!process.env.TS_NODE_DEV;
+    const libraryPath = process.env.BH_LIBRARY_PATH;
+    const excludedKeywords = process.env.BH_EXCLUDED_KEYWORDS.split(",").map((k) => k.toLowerCase()) || [];
+    const extensions = process.env.BH_EXTENSIONS.split(",") || [];
 
-    const libraryPath = standalone || dev ? "Z:/torrent/downloads/complete" : "/library";
-    const excludedKeywords = ["f1"];
-    const extensions = ["mp4", "mkv"];
+    if (!libraryPath) {
+        log.error("Library path not set");
+        return;
+    }
+
+    if (!extensions.length) {
+        log.error("Extensions not set");
+        return;
+    }
 
     const files = await readdir(libraryPath);
+    console.log(files);
+
     const paths = files.map((f) => join(libraryPath, f));
 
     const res: {

@@ -3,6 +3,7 @@ import { checkForNewJobs } from './tasks/checkForNewJobs';
 import { importNewMedia } from './tasks/importNewMedia';
 import { refreshSubscriptions } from './tasks/refreshSubscriptions';
 import { log } from './logger';
+import tasks from "./tasks.json"
 
 log.info(`Starting CMS`);
 
@@ -12,30 +13,23 @@ export interface ScheduledTask {
 	interval: number;
 }
 
-export const scheduledTasks: ScheduledTask[] = [
-	{
-		name: 'Seed database',
-		run: seedDatabase,
-		interval: 0 // One time
-	},
-	{
-		name: 'Check for new jobs',
-		run: checkForNewJobs,
-		interval: 30_000 // 30 seconds
-	},
-	{
-		name: 'Refresh subscriptions',
-		run: refreshSubscriptions,
-		interval: 1000 * 60 * 60 * 24 // 1 day
-	},
-	{
-		name: 'Check for new media',
-		run: importNewMedia,
-		interval: 1000 * 60 * 60 // 1 hour
-	}
-];
+export const taskMap: { [key: string]: ScheduledTask["run"] } = {
+	"seedDatabase": seedDatabase,
+	"checkForNewJobs": checkForNewJobs,
+	"importNewMedia": importNewMedia,
+	"refreshSubscriptions": refreshSubscriptions
+}
 
-// Check for new jobs every 30 seconds
+export const scheduledTasks: ScheduledTask[] = tasks.map((task) => {
+	log.info(`Loading task ${task.name} with interval ${task.interval}ms: ${taskMap[task.run]?.name}`)
+
+	return {
+		name: task.name,
+		run: taskMap[task.run],
+		interval: task.interval
+	}
+});
+
 scheduledTasks.forEach((task) => {
 	if (task.interval !== 0) {
 		log.info(`Scheduling task ${task.name} to run every ${task.interval}ms`);
